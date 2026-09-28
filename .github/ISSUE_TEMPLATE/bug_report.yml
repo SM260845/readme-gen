@@ -50,6 +50,6 @@ body:
     id: version
     attributes:
       label: repo2readme version and Node.js version
-      placeholder: "repo2readme 0.3.0, Node 22.x (repo2readme --version; node -v)"
+      placeholder: "repo2readme 0.3.1, Node 22.x (repo2readme --version; node -v)"
     validations:
       required: true
