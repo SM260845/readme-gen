@@ -49,6 +49,7 @@
     "build": "tsc -p tsconfig.build.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "lint": "eslint .",
+    "check:readme": "npm run build && node bin/repo2readme.js check README.md",
     "test": "vitest run",
     "test:watch": "vitest",
     "prepare": "npm run build",

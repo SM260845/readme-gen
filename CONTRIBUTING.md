@@ -33,6 +33,8 @@ Set `GITHUB_TOKEN` if you hit the anonymous rate limit (60 requests/hour).
 | Path | Responsibility |
 | --- | --- |
 | `src/cli.ts` | Argument parsing, prompts, orchestration, summary |
+| `src/check.ts` | Offline README self-check (`repo2readme check`, `npm run check:readme`) |
+| `src/errors.ts` | Error types and exit codes |
 | `src/github.ts` | URL validation and the read-only GitHub client |
 | `src/inventory.ts` | File classification, exclusions, selection limits |
 | `src/brief.ts` | Project brief: facts, commands and their evidence, unknowns |
@@ -65,6 +67,7 @@ Implement `ReadmeProvider` (`generateReadme(brief, style): Promise<GeneratedRead
 
 - Keep PRs focused. Add or update tests with every behavior change.
 - `npm run lint`, `npm run typecheck`, `npm test` and `npm run build` must all pass. CI runs the same checks.
+- If you change the README, `package.json`, the CLI flags or `action.yml`, run `npm run check:readme`. The README check workflow fails when a README claim no longer matches the repository.
 - **Snapshots.** `test/styles.snapshot.test.ts` compares the full fixture output of every style with `test/__snapshots__/<fixture>-<style>.md`. If you change output on purpose, run `npx vitest -u`, review the snapshot diff, and commit it with your change. An unexpected snapshot diff is a regression.
 - Update `CHANGELOG.md` under **Unreleased**.
 - By contributing, you agree your work is licensed under the [MIT License](LICENSE) and that you will follow the [Code of Conduct](CODE_OF_CONDUCT.md).

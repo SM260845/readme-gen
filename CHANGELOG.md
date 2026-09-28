@@ -6,7 +6,12 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ### Added
 
+- `repo2readme check [README.md]`: an offline, keyless check that a README still matches its repository (npm scripts, file paths, own version/Action tag/tarball, CLI flags vs `--help`, Node.js engine, anchors, Action inputs, `src/` layout). Exits 5 on drift.
+- README check workflow (`.github/workflows/readme-check.yml`) runs it against this repository's own README on relevant pushes and pull requests and weekly; README badge and section document it.
 - Snapshot tests for the full fixture output of every style (`widget` and `pyapp`), stored as readable Markdown in `test/__snapshots__/`. Refresh them with `npx vitest -u` after an intentional change. Thanks @sivaadithya25 (#3, #24).
+### Fixed
+
+- README: the `src/` layout now lists `errors.ts` (found by the new check), and the finished snapshot-tests item (#3) is removed from the roadmap.
 
 ## [0.3.1] - 2026-09-28
 

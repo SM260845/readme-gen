@@ -6,6 +6,7 @@ import { Command, CommanderError, InvalidArgumentError, Option } from 'commander
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { buildBrief } from './brief.js';
+import { runCheck } from './check.js';
 import { ExitCode, Repo2ReadmeError, UsageError, ValidationError } from './errors.js';
 import { DEFAULT_BASE_URL, DEFAULT_MODEL, FixtureProvider, OpenAICompatibleProvider, resolveProviderConfig, type ReadmeProvider } from './generator.js';
 import { GitHubClient, parseRepoUrl, type FetchLike, type RepoRef } from './github.js';
@@ -97,9 +98,24 @@ Environment:
 Examples:
   $ repo2readme
   $ repo2readme https://github.com/acme/widget --style professional
-  $ repo2readme https://github.com/acme/widget -s minimalist --dry-run`,
+  $ repo2readme https://github.com/acme/widget -s minimalist --dry-run
+  $ repo2readme check README.md   # offline: does a README still match its repo?`,
     );
   return program;
+}
+
+/** Every flag the CLI accepts (`cliFlags`) and the ones `--help` shows (`helpFlags`). */
+export function programFlags(program: Command = buildProgram()): { cliFlags: Set<string>; helpFlags: Set<string> } {
+  const cliFlags = new Set<string>(['-h', '--help']);
+  const helpFlags = new Set<string>(['-h', '--help']);
+  for (const o of program.options) {
+    for (const f of [o.short, o.long]) {
+      if (!f) continue;
+      cliFlags.add(f);
+      if (!o.hidden) helpFlags.add(f);
+    }
+  }
+  return { cliFlags, helpFlags };
 }
 
 async function defaultPrompts(): Promise<Prompts> {
@@ -134,6 +150,7 @@ export async function run(argv: string[], deps: CliDeps = {}): Promise<number> {
   const say = (s: string) => stderr(scrubKnownValues(s, secrets) + '\n');
 
   const program = buildProgram();
+  if (argv[0] === 'check') return runCheck(argv.slice(1), { cwd, stdout, stderr, flags: programFlags(program) });
   program.exitOverride();
   program.configureOutput({ writeOut: (s) => stdout(s), writeErr: (s) => stderr(s) });
 
