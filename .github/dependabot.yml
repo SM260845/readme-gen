@@ -5,7 +5,14 @@ updates:
     schedule:
       interval: weekly
     open-pull-requests-limit: 5
+    ignore:
+      # @types/node tracks the minimum supported Node.js (engines: >=22), not the latest.
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
     groups:
+      eslint:
+        # eslint and @eslint/js must move together.
+        patterns: ["eslint", "@eslint/js", "typescript-eslint"]
       dev-dependencies:
         dependency-type: development
         update-types: [minor, patch]

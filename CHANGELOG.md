@@ -16,6 +16,7 @@ All notable changes to this project are documented here. The format follows [Kee
 - Structured project brief: facts, commands and their evidence, unknowns, warnings.
 - OpenAI-compatible chat-completions provider (xAI by default) with JSON-schema structured output, plus a deterministic fixture provider.
 - Validation: exactly one H1, balanced code fences, no template placeholders, and claim tracing. Untraced commands, links, badges and license statements are listed in a "Verify before publishing" checklist.
+- Prebuilt npm tarball attached to each GitHub release (`npm install --global <tarball URL>`).
 - Atomic writes. `README.generated.md` is never overwritten without `--force`.
 
 [Unreleased]: https://github.com/SM260845/readme-gen/compare/v0.1.0...HEAD

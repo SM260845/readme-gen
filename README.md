@@ -91,13 +91,13 @@ Released under the MIT license. See [license](license).
 
 ## Install
 
-Straight from GitHub (builds on install):
+Install the prebuilt package attached to the latest [GitHub release](https://github.com/SM260845/readme-gen/releases):
 
 ```sh
-npm install --global github:SM260845/readme-gen
+npm install --global https://github.com/SM260845/readme-gen/releases/download/v0.1.0/readme-gen-0.1.0.tgz
 ```
 
-Or from a clone:
+Or run it from a clone:
 
 ```sh
 git clone https://github.com/SM260845/readme-gen.git
@@ -106,10 +106,8 @@ npm install        # also builds dist/ via the prepare script
 npm link           # puts `readme-gen` on your PATH
 ```
 
-Each [GitHub release](https://github.com/SM260845/readme-gen/releases) also has a prebuilt `readme-gen-<version>.tgz` attached, which you can install with `npm install --global <tarball URL>`.
-
 > [!NOTE]
-> readme-gen is not on the npm registry yet. The unscoped name `readme-gen` belongs to an unrelated package, so **don't** run `npm install readme-gen`. See [#5](https://github.com/SM260845/readme-gen/issues/5).
+> readme-gen is not on the npm registry yet. The unscoped name `readme-gen` belongs to an unrelated package, so **don't** run `npm install readme-gen`. See [#5](https://github.com/SM260845/readme-gen/issues/5). `npm install --global github:SM260845/readme-gen` also fails for now, because npm's global git installs don't build TypeScript. Use the release tarball instead.
 
 ## Quick start
 
