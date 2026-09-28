@@ -1,0 +1,79 @@
+# Dogfood: run this repository's own composite Action (uses: ./, i.e. the current commit)
+# to draft a README for repo2readme itself. The result is uploaded as a workflow artifact
+# for review only; the committed README.md is never modified and no PR is opened.
+#
+# Real generation needs one of these repository secrets (checked in this order):
+#   REPO2README_API_KEY or XAI_API_KEY  -> xAI endpoint (https://api.x.ai/v1, default model)
+#   OPENAI_API_KEY                      -> https://api.openai.com/v1 with gpt-4.1-mini
+# Without any of them, generation is skipped with a notice and the job still succeeds.
+name: README (dogfood)
+
+on:
+  workflow_dispatch:
+    inputs:
+      style:
+        description: Writing style
+        type: choice
+        options: [professional, trendy, minimalist, comprehensive]
+        default: professional
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: readme-dogfood-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check for an API key secret
+        id: check
+        env:
+          HAS_R2R: ${{ secrets.REPO2README_API_KEY != '' }}
+          HAS_XAI: ${{ secrets.XAI_API_KEY != '' }}
+          HAS_OPENAI: ${{ secrets.OPENAI_API_KEY != '' }}
+        run: |
+          if [ "$HAS_R2R" = true ] || [ "$HAS_XAI" = true ]; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+            echo "base-url=" >> "$GITHUB_OUTPUT"
+            echo "model=" >> "$GITHUB_OUTPUT"
+          elif [ "$HAS_OPENAI" = true ]; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+            echo "base-url=https://api.openai.com/v1" >> "$GITHUB_OUTPUT"
+            echo "model=gpt-4.1-mini" >> "$GITHUB_OUTPUT"
+          else
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::No REPO2README_API_KEY, XAI_API_KEY or OPENAI_API_KEY secret is set; skipping README generation."
+            echo "README generation skipped: no API key secret configured." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - if: steps.check.outputs.enabled == 'true'
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - if: steps.check.outputs.enabled == 'true'
+        name: Generate README with the local action
+        id: gen
+        uses: ./
+        with:
+          style: ${{ inputs.style || 'professional' }}
+          provider: openai
+          api-key: ${{ secrets.REPO2README_API_KEY || secrets.XAI_API_KEY || secrets.OPENAI_API_KEY }}
+          base-url: ${{ steps.check.outputs.base-url }}
+          model: ${{ steps.check.outputs.model }}
+          output: out/README.generated.md
+          artifact-name: repo2readme-dogfood-${{ inputs.style || 'professional' }}
+
+      - if: steps.check.outputs.enabled == 'true'
+        name: Check the output
+        env:
+          OUT: ${{ steps.gen.outputs.path }}
+        run: |
+          test -s "$OUT"
+          echo "Generated $(wc -l < "$OUT") lines at $OUT"
