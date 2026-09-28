@@ -41,7 +41,7 @@ Set `GITHUB_TOKEN` if you hit the anonymous rate limit (60 requests/hour).
 | `src/output.ts` | Overwrite protection, atomic write, summary |
 | `src/secrets.ts` | Secret-pattern scanner |
 | `src/styles.ts` | Style definitions |
-| `test/` | Vitest suites; `test/fixtures/` holds fixture repositories |
+| `test/` | Vitest suites; `test/fixtures/` holds fixture repositories, `test/__snapshots__/` the full output of every style |
 
 ## Ground rules
 
@@ -55,6 +55,7 @@ Set `GITHUB_TOKEN` if you hit the anonymous rate limit (60 requests/hour).
 1. Add the style to `STYLE_IDS` and `STYLES` in `src/styles.ts`. Write a clear `instruction`, since it is sent to the model verbatim.
 2. Add a branch to `FixtureProvider` in `src/generator.ts` so the style has deterministic output.
 3. Add the style to the CLI tests' `it.each(STYLE_IDS)` coverage (automatic) and update the styles table in `README.md`.
+4. Run `npx vitest -u` to create the new style's snapshots in `test/__snapshots__/`, review them, and commit them.
 
 ## Adding a provider
 
@@ -64,5 +65,6 @@ Implement `ReadmeProvider` (`generateReadme(brief, style): Promise<GeneratedRead
 
 - Keep PRs focused. Add or update tests with every behavior change.
 - `npm run lint`, `npm run typecheck`, `npm test` and `npm run build` must all pass. CI runs the same checks.
+- **Snapshots.** `test/styles.snapshot.test.ts` compares the full fixture output of every style with `test/__snapshots__/<fixture>-<style>.md`. If you change output on purpose, run `npx vitest -u`, review the snapshot diff, and commit it with your change. An unexpected snapshot diff is a regression.
 - Update `CHANGELOG.md` under **Unreleased**.
 - By contributing, you agree your work is licensed under the [MIT License](LICENSE) and that you will follow the [Code of Conduct](CODE_OF_CONDUCT.md).

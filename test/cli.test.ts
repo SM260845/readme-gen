@@ -1,25 +1,15 @@
-import { mkdtemp, readFile, writeFile } from 'node:fs/promises';
-import os from 'node:os';
+import { readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import type { ProjectBrief } from '../src/brief.js';
-import { run, type CliDeps, type Prompts } from '../src/cli.js';
+import { run, type Prompts } from '../src/cli.js';
 import { GenerationError } from '../src/errors.js';
 import { FixtureProvider, type ReadmeProvider } from '../src/generator.js';
 import { STYLE_IDS } from '../src/styles.js';
-import { captureIO, createMockFetch, fakeSecrets, json, loadFixture, type MockFetchOptions } from './helpers.js';
+import { cli, tmp } from './cli-helpers.js';
+import { captureIO, createMockFetch, fakeSecrets, json, loadFixture } from './helpers.js';
 
 const URL_ = 'https://github.com/acme/widget';
-const tmp = () => mkdtemp(path.join(os.tmpdir(), 'repo2readme-cli-'));
-
-async function cli(argv: string[], opts: { fixture?: string | null; mock?: MockFetchOptions; deps?: Partial<CliDeps>; env?: Record<string, string> } = {}) {
-  const io = captureIO();
-  const fx = opts.fixture === null ? null : loadFixture(opts.fixture ?? 'widget');
-  const mock = createMockFetch(fx, opts.mock);
-  const cwd = opts.deps?.cwd ?? (await tmp());
-  const code = await run(argv, { fetch: mock.fetch, env: opts.env ?? {}, cwd, stdout: io.stdout, stderr: io.stderr, isTTY: false, ...opts.deps });
-  return { code, out: io.out, err: io.err, requests: mock.requests, cwd };
-}
 
 describe('CLI: happy paths', () => {
   it.each(STYLE_IDS)('--dry-run produces clean Markdown for style %s', async (style) => {

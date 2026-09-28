@@ -4,6 +4,10 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+### Added
+
+- Snapshot tests for the full fixture output of every style (`widget` and `pyapp`), stored as readable Markdown in `test/__snapshots__/`. Refresh them with `npx vitest -u` after an intentional change. Thanks @sivaadithya25 (#3, #24).
+
 ## [0.3.1] - 2026-09-28
 
 ### Fixed
