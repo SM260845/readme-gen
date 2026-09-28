@@ -107,10 +107,10 @@ Or run it once without installing:
 npx repo2readme https://github.com/acme/widget
 ```
 
-Alternatively, install the prebuilt tarball attached to the [v0.3.1 release](https://github.com/SM260845/repo2readme/releases/tag/v0.3.1):
+Alternatively, install the prebuilt tarball attached to the [v0.3.2 release](https://github.com/SM260845/repo2readme/releases/tag/v0.3.2):
 
 ```sh
-npm install --global https://github.com/SM260845/repo2readme/releases/download/v0.3.1/repo2readme-0.3.1.tgz
+npm install --global https://github.com/SM260845/repo2readme/releases/download/v0.3.2/repo2readme-0.3.2.tgz
 ```
 
 Or run it from a clone:
@@ -142,7 +142,7 @@ jobs:
   readme:
     runs-on: ubuntu-latest
     steps:
-      - uses: SM260845/repo2readme@v0.3.1
+      - uses: SM260845/repo2readme@v0.3.2
         with:
           style: professional                     # professional | trendy | minimalist | comprehensive
           api-key: ${{ secrets.REPO2README_API_KEY }}

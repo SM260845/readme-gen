@@ -4,11 +4,13 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+## [0.3.2] - 2026-09-28
+
 ### Added
 
 - `repo2readme check [README.md]`: an offline, keyless check that a README still matches its repository (npm scripts, file paths, own version/Action tag/tarball, CLI flags vs `--help`, Node.js engine, anchors, Action inputs, `src/` layout). Exits 5 on drift.
 - README check workflow (`.github/workflows/readme-check.yml`) runs it against this repository's own README on relevant pushes and pull requests and weekly; README badge and section document it.
-- Snapshot tests for the full fixture output of every style (`widget` and `pyapp`), stored as readable Markdown in `test/__snapshots__/`. Refresh them with `npx vitest -u` after an intentional change. Thanks @sivaadithya25 (#3, #24).
+- Snapshot tests for the full fixture output of every style (`widget` and `pyapp`), stored as readable Markdown in `test/__snapshots__/`. Refresh them with `npx vitest -u` after an intentional change. Thanks @sivaadithya25 for this contribution (#3, #24).
 
 ### Fixed
 
@@ -65,7 +67,8 @@ All notable changes to this project are documented here. The format follows [Kee
 - Prebuilt npm tarball attached to each GitHub release (`npm install --global <tarball URL>`).
 - Atomic writes. `README.generated.md` is never overwritten without `--force`.
 
-[Unreleased]: https://github.com/SM260845/repo2readme/compare/v0.3.1...HEAD
+[Unreleased]: https://github.com/SM260845/repo2readme/compare/v0.3.2...HEAD
+[0.3.2]: https://github.com/SM260845/repo2readme/compare/v0.3.1...v0.3.2
 [0.3.1]: https://github.com/SM260845/repo2readme/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/SM260845/repo2readme/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/SM260845/repo2readme/compare/v0.1.0...v0.2.0

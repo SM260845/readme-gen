@@ -1,6 +1,6 @@
 {
   "name": "repo2readme",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Turn any public GitHub repo into a polished, evidence-backed README draft in one command. Professional, trendy, minimalist or comprehensive, with every command, link and badge traced to the source.",
   "keywords": [
     "readme",
