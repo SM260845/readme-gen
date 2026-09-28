@@ -105,10 +105,10 @@ Or run it once without installing:
 npx repo2readme https://github.com/acme/widget
 ```
 
-Alternatively, install the prebuilt tarball attached to the [v0.2.0 release](https://github.com/SM260845/repo2readme/releases/tag/v0.2.0):
+Alternatively, install the prebuilt tarball attached to the [v0.3.0 release](https://github.com/SM260845/repo2readme/releases/tag/v0.3.0):
 
 ```sh
-npm install --global https://github.com/SM260845/repo2readme/releases/download/v0.2.0/repo2readme-0.2.0.tgz
+npm install --global https://github.com/SM260845/repo2readme/releases/download/v0.3.0/repo2readme-0.3.0.tgz
 ```
 
 Or run it from a clone:
@@ -140,7 +140,7 @@ jobs:
   readme:
     runs-on: ubuntu-latest
     steps:
-      - uses: SM260845/repo2readme@v0.2.0
+      - uses: SM260845/repo2readme@v0.3.0
         with:
           style: professional                     # professional | trendy | minimalist | comprehensive
           api-key: ${{ secrets.REPO2README_API_KEY }}
@@ -350,7 +350,7 @@ CI runs lint, typecheck, test and build on Node 22 and 24 (`.github/workflows/ci
 
 repo2readme is intentionally narrow for now: public repositories only, and output stays local (or becomes a CI artifact). Planned next (see the [v0.2.0 milestone](https://github.com/SM260845/repo2readme/milestone/1)):
 
-- More ecosystem detectors: [Deno tasks #1](https://github.com/SM260845/repo2readme/issues/1), [Ruby #2](https://github.com/SM260845/repo2readme/issues/2)
+- More ecosystem detectors: [Deno tasks #1](https://github.com/SM260845/repo2readme/issues/1)
 - [Snapshot tests for every style #3](https://github.com/SM260845/repo2readme/issues/3)
 - [Local models (Ollama, LM Studio) #4](https://github.com/SM260845/repo2readme/issues/4)
 

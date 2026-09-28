@@ -4,6 +4,8 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-09-28
+
 ### Added
 
 - Detect Ruby install, Rake task, and gem-install commands from repository manifests.
@@ -40,6 +42,7 @@ All notable changes to this project are documented here. The format follows [Kee
 - Prebuilt npm tarball attached to each GitHub release (`npm install --global <tarball URL>`).
 - Atomic writes. `README.generated.md` is never overwritten without `--force`.
 
-[Unreleased]: https://github.com/SM260845/repo2readme/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/SM260845/repo2readme/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/SM260845/repo2readme/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/SM260845/repo2readme/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/SM260845/repo2readme/releases/tag/v0.1.0
