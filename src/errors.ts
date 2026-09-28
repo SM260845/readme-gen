@@ -11,19 +11,19 @@ export const ExitCode = {
 export type ExitCodeValue = (typeof ExitCode)[keyof typeof ExitCode];
 
 /** An error with a user-facing, actionable message and a process exit code. */
-export class ReadmeGenError extends Error {
+export class Repo2ReadmeError extends Error {
   readonly exitCode: ExitCodeValue;
   readonly hint: string | undefined;
 
   constructor(message: string, exitCode: ExitCodeValue, hint?: string) {
     super(message);
-    this.name = 'ReadmeGenError';
+    this.name = 'Repo2ReadmeError';
     this.exitCode = exitCode;
     this.hint = hint;
   }
 }
 
-export class UsageError extends ReadmeGenError {
+export class UsageError extends Repo2ReadmeError {
   constructor(message: string, hint?: string) {
     super(message, ExitCode.USAGE, hint);
     this.name = 'UsageError';
@@ -42,7 +42,7 @@ export type GitHubErrorKind =
   | 'server'
   | 'bad_response';
 
-export class GitHubError extends ReadmeGenError {
+export class GitHubError extends Repo2ReadmeError {
   readonly kind: GitHubErrorKind;
   readonly status: number | undefined;
   readonly resetAt: Date | undefined;
@@ -60,14 +60,14 @@ export class GitHubError extends ReadmeGenError {
   }
 }
 
-export class GenerationError extends ReadmeGenError {
+export class GenerationError extends Repo2ReadmeError {
   constructor(message: string, hint?: string) {
     super(message, ExitCode.GENERATION, hint);
     this.name = 'GenerationError';
   }
 }
 
-export class ValidationError extends ReadmeGenError {
+export class ValidationError extends Repo2ReadmeError {
   readonly problems: string[];
   constructor(message: string, problems: string[], hint?: string) {
     super(message, ExitCode.VALIDATION, hint);
@@ -76,7 +76,7 @@ export class ValidationError extends ReadmeGenError {
   }
 }
 
-export class OutputError extends ReadmeGenError {
+export class OutputError extends Repo2ReadmeError {
   constructor(message: string, hint?: string) {
     super(message, ExitCode.OUTPUT, hint);
     this.name = 'OutputError';

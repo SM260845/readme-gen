@@ -7,9 +7,9 @@ import { briefFor, fakeSecrets, json, loadFixture } from './helpers.js';
 const completion = (content: unknown, finish = 'stop') => json({ choices: [{ message: { role: 'assistant', content: typeof content === 'string' ? content : JSON.stringify(content) }, finish_reason: finish }] });
 
 describe('resolveProviderConfig', () => {
-  it('prefers READMEGEN_API_KEY and defaults to xAI', () => {
-    const cfg = resolveProviderConfig({ READMEGEN_API_KEY: 'k1-aaaaaaaa', XAI_API_KEY: 'k2', OPENAI_API_KEY: 'k3' });
-    expect(cfg).toMatchObject({ apiKey: 'k1-aaaaaaaa', keySource: 'READMEGEN_API_KEY', baseUrl: 'https://api.x.ai/v1', model: 'grok-4.6' });
+  it('prefers REPO2README_API_KEY and defaults to xAI', () => {
+    const cfg = resolveProviderConfig({ REPO2README_API_KEY: 'k1-aaaaaaaa', XAI_API_KEY: 'k2', OPENAI_API_KEY: 'k3' });
+    expect(cfg).toMatchObject({ apiKey: 'k1-aaaaaaaa', keySource: 'REPO2README_API_KEY', baseUrl: 'https://api.x.ai/v1', model: 'grok-4.6' });
   });
   it('uses XAI_API_KEY next', () => {
     expect(resolveProviderConfig({ XAI_API_KEY: 'k2', OPENAI_API_KEY: 'k3' }).keySource).toBe('XAI_API_KEY');
@@ -18,14 +18,14 @@ describe('resolveProviderConfig', () => {
     const cfg = resolveProviderConfig({ OPENAI_API_KEY: 'k3' });
     expect(cfg.baseUrl).toBe('https://api.openai.com/v1');
   });
-  it('honours READMEGEN_BASE_URL and READMEGEN_MODEL', () => {
-    const cfg = resolveProviderConfig({ OPENAI_API_KEY: 'k3', READMEGEN_BASE_URL: 'https://llm.example.com/v1/', READMEGEN_MODEL: 'm1' });
+  it('honours REPO2README_BASE_URL and REPO2README_MODEL', () => {
+    const cfg = resolveProviderConfig({ OPENAI_API_KEY: 'k3', REPO2README_BASE_URL: 'https://llm.example.com/v1/', REPO2README_MODEL: 'm1' });
     expect(cfg).toMatchObject({ baseUrl: 'https://llm.example.com/v1', model: 'm1' });
   });
   it('rejects missing keys and insecure base URLs', () => {
     expect(() => resolveProviderConfig({})).toThrow(UsageError);
-    expect(() => resolveProviderConfig({ READMEGEN_API_KEY: 'k', READMEGEN_BASE_URL: 'http://evil.example.com' })).toThrow(/https/);
-    expect(resolveProviderConfig({ READMEGEN_API_KEY: 'k', READMEGEN_BASE_URL: 'http://localhost:8080/v1' }).baseUrl).toBe('http://localhost:8080/v1');
+    expect(() => resolveProviderConfig({ REPO2README_API_KEY: 'k', REPO2README_BASE_URL: 'http://evil.example.com' })).toThrow(/https/);
+    expect(resolveProviderConfig({ REPO2README_API_KEY: 'k', REPO2README_BASE_URL: 'http://localhost:8080/v1' }).baseUrl).toBe('http://localhost:8080/v1');
   });
 });
 
@@ -73,7 +73,7 @@ describe('FixtureProvider', () => {
 });
 
 describe('OpenAICompatibleProvider', () => {
-  const config = { apiKey: fakeSecrets.xaiKey(), keySource: 'READMEGEN_API_KEY', baseUrl: 'https://api.x.ai/v1', model: 'grok-4.6', timeoutMs: 5000 };
+  const config = { apiKey: fakeSecrets.xaiKey(), keySource: 'REPO2README_API_KEY', baseUrl: 'https://api.x.ai/v1', model: 'grok-4.6', timeoutMs: 5000 };
   const good = { title: 'widget', sections: [{ heading: 'Overview', body: 'Render widgets.' }], warnings: ['check badge'] };
 
   it('posts a JSON-schema structured request and parses the response', async () => {

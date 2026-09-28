@@ -1,12 +1,12 @@
 /**
- * readme-generator CLI entry point. `run()` is dependency-injected so the whole flow
+ * repo2readme CLI entry point. `run()` is dependency-injected so the whole flow
  * can be exercised in tests with a mocked fetch and no network.
  */
 import { Command, CommanderError, InvalidArgumentError, Option } from 'commander';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { buildBrief } from './brief.js';
-import { ExitCode, ReadmeGenError, UsageError, ValidationError } from './errors.js';
+import { ExitCode, Repo2ReadmeError, UsageError, ValidationError } from './errors.js';
 import { FixtureProvider, OpenAICompatibleProvider, resolveProviderConfig, type ReadmeProvider } from './generator.js';
 import { GitHubClient, parseRepoUrl, type FetchLike, type RepoRef } from './github.js';
 import { buildInventory, DEFAULT_LIMITS, type InventoryLimits } from './inventory.js';
@@ -67,7 +67,7 @@ function positiveInt(label: string) {
 export function buildProgram(): Command {
   const program = new Command();
   program
-    .name('readme-generator')
+    .name('repo2readme')
     .description('Generate a polished, evidence-backed README for a public GitHub repository.\nThe original README is never touched; output goes to README.generated.md by default.')
     .version(readVersion(), '-V, --version')
     .argument('[url]', 'public repository URL, e.g. https://github.com/acme/widget')
@@ -90,14 +90,14 @@ ${STYLE_IDS.map((s) => `  ${s.padEnd(14)} ${STYLES[s].summary}`).join('\n')}
 
 Environment:
   GITHUB_TOKEN          optional; raises GitHub rate limits (read-only use)
-  READMEGEN_API_KEY     generation API key (or XAI_API_KEY / OPENAI_API_KEY)
-  READMEGEN_BASE_URL    OpenAI-compatible endpoint (default https://api.x.ai/v1)
-  READMEGEN_MODEL       model name (default grok-4.6)
+  REPO2README_API_KEY     generation API key (or XAI_API_KEY / OPENAI_API_KEY)
+  REPO2README_BASE_URL    OpenAI-compatible endpoint (default https://api.x.ai/v1)
+  REPO2README_MODEL       model name (default grok-4.6)
 
 Examples:
-  $ readme-generator
-  $ readme-generator https://github.com/acme/widget --style professional
-  $ readme-generator https://github.com/acme/widget -s minimalist --dry-run`,
+  $ repo2readme
+  $ repo2readme https://github.com/acme/widget --style professional
+  $ repo2readme https://github.com/acme/widget -s minimalist --dry-run`,
     );
   return program;
 }
@@ -130,7 +130,7 @@ export async function run(argv: string[], deps: CliDeps = {}): Promise<number> {
   const stdout = deps.stdout ?? ((s: string) => process.stdout.write(s));
   const stderr = deps.stderr ?? ((s: string) => process.stderr.write(s));
   const isTTY = deps.isTTY ?? Boolean(process.stdin.isTTY && process.stdout.isTTY);
-  const secrets = [env.GITHUB_TOKEN, env.READMEGEN_API_KEY, env.XAI_API_KEY, env.OPENAI_API_KEY];
+  const secrets = [env.GITHUB_TOKEN, env.REPO2README_API_KEY, env.XAI_API_KEY, env.OPENAI_API_KEY];
   const say = (s: string) => stderr(scrubKnownValues(s, secrets) + '\n');
 
   const program = buildProgram();
@@ -156,7 +156,7 @@ export async function run(argv: string[], deps: CliDeps = {}): Promise<number> {
 
     // 1. Repository URL
     if (!urlArg) {
-      if (!isTTY) throw new UsageError('Missing repository URL.', 'Usage: readme-generator <https://github.com/owner/repo> --style <professional|trendy|minimalist|comprehensive>');
+      if (!isTTY) throw new UsageError('Missing repository URL.', 'Usage: repo2readme <https://github.com/owner/repo> --style <professional|trendy|minimalist|comprehensive>');
       interactive = true;
       urlArg = await (await getPrompts()).input({
         message: 'GitHub repository URL:',
@@ -165,7 +165,7 @@ export async function run(argv: string[], deps: CliDeps = {}): Promise<number> {
             parseRepoUrl(v);
             return true;
           } catch (e) {
-            return e instanceof ReadmeGenError ? `${e.message}${e.hint ? ` ${e.hint}` : ''}` : 'Invalid URL';
+            return e instanceof Repo2ReadmeError ? `${e.message}${e.hint ? ` ${e.hint}` : ''}` : 'Invalid URL';
           }
         },
       });
@@ -264,7 +264,7 @@ export async function run(argv: string[], deps: CliDeps = {}): Promise<number> {
     else say(summary);
     return ExitCode.OK;
   } catch (err) {
-    if (err instanceof ReadmeGenError) {
+    if (err instanceof Repo2ReadmeError) {
       say(`Error: ${err.message}`);
       if (err.hint) say(`  ${err.hint}`);
       return err.exitCode;

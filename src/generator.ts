@@ -236,13 +236,13 @@ export interface ProviderConfig {
 
 /**
  * Resolve provider configuration from the environment.
- * Key precedence: READMEGEN_API_KEY, XAI_API_KEY, OPENAI_API_KEY.
- * If only OPENAI_API_KEY is set and READMEGEN_BASE_URL is not, the OpenAI endpoint is used
+ * Key precedence: REPO2README_API_KEY, XAI_API_KEY, OPENAI_API_KEY.
+ * If only OPENAI_API_KEY is set and REPO2README_BASE_URL is not, the OpenAI endpoint is used
  * so an OpenAI key is never sent to a different vendor.
  */
 export function resolveProviderConfig(env: Record<string, string | undefined>, timeoutMs = 120_000): ProviderConfig {
   const candidates: Array<[string, string | undefined]> = [
-    ['READMEGEN_API_KEY', env.READMEGEN_API_KEY],
+    ['REPO2README_API_KEY', env.REPO2README_API_KEY],
     ['XAI_API_KEY', env.XAI_API_KEY],
     ['OPENAI_API_KEY', env.OPENAI_API_KEY],
   ];
@@ -250,23 +250,23 @@ export function resolveProviderConfig(env: Record<string, string | undefined>, t
   if (!found) {
     throw new UsageError(
       'No generation provider API key found.',
-      'Set READMEGEN_API_KEY (or XAI_API_KEY / OPENAI_API_KEY). Optionally set READMEGEN_BASE_URL and READMEGEN_MODEL.',
+      'Set REPO2README_API_KEY (or XAI_API_KEY / OPENAI_API_KEY). Optionally set REPO2README_BASE_URL and REPO2README_MODEL.',
     );
   }
   const [keySource, apiKey] = found as [string, string];
-  const explicitBase = env.READMEGEN_BASE_URL?.trim();
+  const explicitBase = env.REPO2README_BASE_URL?.trim();
   const openaiOnly = keySource === 'OPENAI_API_KEY' && !explicitBase;
   const baseUrl = (explicitBase || (openaiOnly ? OPENAI_BASE_URL : DEFAULT_BASE_URL)).replace(/\/+$/, '');
   let parsed: URL;
   try {
     parsed = new URL(baseUrl);
   } catch {
-    throw new UsageError(`READMEGEN_BASE_URL "${baseUrl}" is not a valid URL.`);
+    throw new UsageError(`REPO2README_BASE_URL "${baseUrl}" is not a valid URL.`);
   }
   if (parsed.protocol !== 'https:' && !['localhost', '127.0.0.1', '::1'].includes(parsed.hostname)) {
-    throw new UsageError('READMEGEN_BASE_URL must use https (http is only allowed for localhost).');
+    throw new UsageError('REPO2README_BASE_URL must use https (http is only allowed for localhost).');
   }
-  const model = env.READMEGEN_MODEL?.trim() || (openaiOnly ? OPENAI_DEFAULT_MODEL : DEFAULT_MODEL);
+  const model = env.REPO2README_MODEL?.trim() || (openaiOnly ? OPENAI_DEFAULT_MODEL : DEFAULT_MODEL);
   return { apiKey: apiKey.trim(), keySource, baseUrl, model, timeoutMs };
 }
 
@@ -308,7 +308,7 @@ export class OpenAICompatibleProvider implements ReadmeProvider {
           'Content-Type': 'application/json',
           Accept: 'application/json',
           Authorization: `Bearer ${this.config.apiKey}`,
-          'User-Agent': 'readme-generator',
+          'User-Agent': 'repo2readme',
         },
         body: JSON.stringify(body),
         signal: controller.signal,
@@ -317,7 +317,7 @@ export class OpenAICompatibleProvider implements ReadmeProvider {
       if (controller.signal.aborted) {
         throw new GenerationError(
           `The generation provider did not respond within ${Math.round(this.config.timeoutMs / 1000)}s.`,
-          'Retry, raise --gen-timeout, or choose a faster model with READMEGEN_MODEL.',
+          'Retry, raise --gen-timeout, or choose a faster model with REPO2README_MODEL.',
         );
       }
       throw new GenerationError(`Could not reach the generation provider at ${new URL(url).host}: ${scrub(err instanceof Error ? err.message : String(err))}`);
@@ -342,7 +342,7 @@ export class OpenAICompatibleProvider implements ReadmeProvider {
         );
       }
       if (res.status === 404) {
-        throw new GenerationError(`Model or endpoint not found (404)${suffix}.`, `Check READMEGEN_MODEL ("${this.config.model}") and READMEGEN_BASE_URL.`);
+        throw new GenerationError(`Model or endpoint not found (404)${suffix}.`, `Check REPO2README_MODEL ("${this.config.model}") and REPO2README_BASE_URL.`);
       }
       if (res.status === 429) {
         const retry = res.headers.get('retry-after');
@@ -351,7 +351,7 @@ export class OpenAICompatibleProvider implements ReadmeProvider {
       if (res.status === 400 || res.status === 413 || res.status === 422) {
         throw new GenerationError(
           `The generation provider rejected the request (${res.status})${suffix}.`,
-          'The brief may be too large (lower --max-bytes) or the model may not support JSON-schema responses (set READMEGEN_MODEL).',
+          'The brief may be too large (lower --max-bytes) or the model may not support JSON-schema responses (set REPO2README_MODEL).',
         );
       }
       throw new GenerationError(`The generation provider returned HTTP ${res.status}${suffix}.`, 'Retry later.');

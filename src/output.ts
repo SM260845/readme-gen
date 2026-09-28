@@ -100,6 +100,6 @@ export function formatSummary(s: SummaryInput): string {
     for (const c of s.report.unverified.slice(0, 20)) lines.push(`  - [${c.kind}] ${c.value} (line ${c.line}): ${c.note ?? ''}`);
     if (s.report.unverified.length > 20) lines.push(`  - …and ${s.report.unverified.length - 20} more (see the README's "Verify before publishing" section)`);
   }
-  lines.push('Review the README before using it. readme-generator never commits or pushes anything.');
+  lines.push('Review the README before using it. repo2readme never commits or pushes anything.');
   return lines.join('\n');
 }

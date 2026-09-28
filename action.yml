@@ -1,4 +1,4 @@
-name: readme-generator
+name: repo2readme
 description: Draft an evidence-backed README for a public GitHub repository and publish it as an artifact for review.
 author: SM260845
 branding:
@@ -23,15 +23,15 @@ inputs:
     required: false
     default: openai
   api-key:
-    description: API key for the generation endpoint (pass a secret). Exposed to the CLI as READMEGEN_API_KEY.
+    description: API key for the generation endpoint (pass a secret). Exposed to the CLI as REPO2README_API_KEY.
     required: false
     default: ""
   base-url:
-    description: OpenAI-compatible base URL (READMEGEN_BASE_URL). Defaults to https://api.x.ai/v1.
+    description: OpenAI-compatible base URL (REPO2README_BASE_URL). Defaults to https://api.x.ai/v1.
     required: false
     default: ""
   model:
-    description: Model name (READMEGEN_MODEL). Defaults to grok-4.6.
+    description: Model name (REPO2README_MODEL). Defaults to grok-4.6.
     required: false
     default: ""
   github-token:
@@ -45,7 +45,7 @@ inputs:
   artifact-name:
     description: Name of the uploaded artifact.
     required: false
-    default: readme-generated
+    default: repo2readme-output
 
 outputs:
   path:
@@ -59,7 +59,7 @@ runs:
       with:
         node-version: 22
 
-    - name: Install readme-generator
+    - name: Install repo2readme
       shell: bash
       working-directory: ${{ github.action_path }}
       run: npm ci --no-audit --no-fund --loglevel=error # also builds dist/ via the prepare script
@@ -75,10 +75,10 @@ runs:
         INPUT_OUTPUT: ${{ inputs.output }}
         INPUT_PROVIDER: ${{ inputs.provider }}
         GITHUB_TOKEN: ${{ inputs.github-token }}
-        READMEGEN_API_KEY: ${{ inputs.api-key }}
-        READMEGEN_BASE_URL: ${{ inputs.base-url }}
-        READMEGEN_MODEL: ${{ inputs.model }}
-        CLI: ${{ github.action_path }}/bin/readme-generator.js
+        REPO2README_API_KEY: ${{ inputs.api-key }}
+        REPO2README_BASE_URL: ${{ inputs.base-url }}
+        REPO2README_MODEL: ${{ inputs.model }}
+        CLI: ${{ github.action_path }}/bin/repo2readme.js
       run: |
         set -euo pipefail
         repo="${INPUT_REPO_URL:-$DEFAULT_REPO_URL}"
@@ -92,7 +92,7 @@ runs:
         path="$(realpath "$INPUT_OUTPUT")"
         echo "path=$path" >> "$GITHUB_OUTPUT"
         {
-          echo "## readme-generator"
+          echo "## repo2readme"
           echo
           echo '```text'
           cat "$summary"

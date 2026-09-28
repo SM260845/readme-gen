@@ -13,7 +13,7 @@ body:
     id: proposal
     attributes:
       label: Proposed solution
-      description: How should readme-generator behave? Example commands or output help a lot.
+      description: How should repo2readme behave? Example commands or output help a lot.
     validations:
       required: true
   - type: textarea
@@ -25,5 +25,5 @@ body:
     attributes:
       label: Project boundaries
       options:
-        - label: This keeps readme-generator read-only toward GitHub (or I've explained why it shouldn't).
+        - label: This keeps repo2readme read-only toward GitHub (or I've explained why it shouldn't).
         - label: I'm willing to help implement this.

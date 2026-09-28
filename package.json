@@ -1,10 +1,10 @@
 {
-  "name": "@sm260845/readme-generator",
+  "name": "repo2readme",
   "version": "0.2.0",
   "description": "Turn any public GitHub repo into a polished, evidence-backed README draft in one command. Professional, trendy, minimalist or comprehensive, with every command, link and badge traced to the source.",
   "keywords": [
     "readme",
-    "readme-generator",
+    "repo2readme",
     "cli",
     "github",
     "documentation",
@@ -14,20 +14,19 @@
     "developer-tools",
     "typescript"
   ],
-  "homepage": "https://github.com/SM260845/readme-generator#readme",
+  "homepage": "https://github.com/SM260845/repo2readme#readme",
   "bugs": {
-    "url": "https://github.com/SM260845/readme-generator/issues"
+    "url": "https://github.com/SM260845/repo2readme/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/SM260845/readme-generator.git"
+    "url": "git+https://github.com/SM260845/repo2readme.git"
   },
   "license": "MIT",
   "author": "Harry White (https://github.com/SM260845)",
   "type": "module",
   "bin": {
-    "readme-generator": "bin/readme-generator.js",
-    "readme-gen": "bin/readme-generator.js"
+    "repo2readme": "bin/repo2readme.js"
   },
   "files": [
     "bin",

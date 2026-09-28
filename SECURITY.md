@@ -10,13 +10,13 @@ Security fixes go into the latest release only.
 
 ## Reporting a vulnerability
 
-**Do not open a public issue.** Report privately through GitHub's [private vulnerability reporting](https://github.com/SM260845/readme-generator/security/advisories/new).
+**Do not open a public issue.** Report privately through GitHub's [private vulnerability reporting](https://github.com/SM260845/repo2readme/security/advisories/new).
 
-Please include the readme-generator version, the command you ran (redact tokens), what happened and what you expected. We aim to acknowledge reports within 7 days.
+Please include the repo2readme version, the command you ran (redact tokens), what happened and what you expected. We aim to acknowledge reports within 7 days.
 
 ## What counts
 
-readme-generator handles two sensitive things: your credentials (`GITHUB_TOKEN`, the generation API key) and the repository content it sends to your chosen generation provider. We especially want to hear about:
+repo2readme handles two sensitive things: your credentials (`GITHUB_TOKEN`, the generation API key) and the repository content it sends to your chosen generation provider. We especially want to hear about:
 
 - a credential appearing in output, logs, error messages or requests to the wrong host
 - a file that should be excluded (secrets, `.env`, keys) being read or sent to the provider

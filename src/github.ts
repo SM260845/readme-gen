@@ -130,7 +130,7 @@ export class GitHubClient {
     this.timeoutMs = opts.timeoutMs ?? 15_000;
     this.apiBase = (opts.apiBaseUrl ?? 'https://api.github.com').replace(/\/$/, '');
     this.rawBase = (opts.rawBaseUrl ?? 'https://raw.githubusercontent.com').replace(/\/$/, '');
-    this.userAgent = opts.userAgent ?? 'readme-generator';
+    this.userAgent = opts.userAgent ?? 'repo2readme';
   }
 
   get authenticated(): boolean {
@@ -217,7 +217,7 @@ export class GitHubClient {
     };
     if (meta.private) {
       throw new GitHubError('private_repo', `${meta.fullName} is a private repository.`, {
-        hint: 'readme-generator v1 only supports public repositories.',
+        hint: 'repo2readme v1 only supports public repositories.',
       });
     }
     return meta;
@@ -325,7 +325,7 @@ export class GitHubClient {
       case 404:
         return new GitHubError('not_found', `Repository ${full} was not found, or it is private.`, {
           status: 404,
-          hint: 'Check the owner/repo spelling. readme-generator v1 supports public repositories only.',
+          hint: 'Check the owner/repo spelling. repo2readme v1 supports public repositories only.',
         });
       case 409:
         return emptyRepoError(ref);

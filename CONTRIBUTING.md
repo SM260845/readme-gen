@@ -1,4 +1,4 @@
-# Contributing to readme-generator
+# Contributing to repo2readme
 
 Thanks for helping. This guide should get you from clone to merged PR quickly.
 
@@ -6,16 +6,16 @@ Thanks for helping. This guide should get you from clone to merged PR quickly.
 
 - **Try it on a repository you know well** and report what it got wrong. Bad output is the most useful bug report we can get.
 - **Request or refine a style.** Use the *Style request* issue template.
-- **Pick up an issue** labelled [`good first issue`](https://github.com/SM260845/readme-generator/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) or [`help wanted`](https://github.com/SM260845/readme-generator/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22).
-- **Ask or suggest** in [Discussions](https://github.com/SM260845/readme-generator/discussions).
+- **Pick up an issue** labelled [`good first issue`](https://github.com/SM260845/repo2readme/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) or [`help wanted`](https://github.com/SM260845/repo2readme/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22).
+- **Ask or suggest** in [Discussions](https://github.com/SM260845/repo2readme/discussions).
 
 ## Development setup
 
 You need Node.js 22 or newer.
 
 ```sh
-git clone https://github.com/SM260845/readme-generator.git
-cd readme-generator
+git clone https://github.com/SM260845/repo2readme.git
+cd repo2readme
 npm install
 npm run lint && npm run typecheck && npm test && npm run build
 ```
@@ -23,7 +23,7 @@ npm run lint && npm run typecheck && npm test && npm run build
 Run the CLI from source without an LLM key. The hidden `--provider fixture` flag uses a deterministic generator; the GitHub calls are real:
 
 ```sh
-node bin/readme-generator.js https://github.com/sindresorhus/is-plain-obj --style trendy --dry-run --provider fixture --verbose
+node bin/repo2readme.js https://github.com/sindresorhus/is-plain-obj --style trendy --dry-run --provider fixture --verbose
 ```
 
 Set `GITHUB_TOKEN` if you hit the anonymous rate limit (60 requests/hour).
