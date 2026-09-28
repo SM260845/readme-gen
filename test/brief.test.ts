@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { extractDocCommands } from '../src/brief.js';
+import { extractDocCommands, rakeTasks } from '../src/brief.js';
 import { briefFor, fakeSecrets, loadFixture } from './helpers.js';
 
 describe('buildBrief', () => {
@@ -38,6 +38,95 @@ describe('buildBrief', () => {
     expect(brief.commands.find((c) => c.command === 'pip install .')).toMatchObject({ confidence: 'inferred' });
     expect(brief.facts.find((f) => f.key === 'python-version')?.statement).toBe('Requires Python >=3.11');
     expect(brief.warnings.some((w) => /archived/.test(w))).toBe(true);
+  });
+
+  it('detects Ruby install, rake, and gem commands from a small fixture', async () => {
+    const fx = loadFixture('widget', {
+      'package.json': null,
+      'package-lock.json': null,
+      'src/index.ts': null,
+      'docs/configuration.md': null,
+      'README.md': null,
+      'LICENSE': null,
+      'CONTRIBUTING.md': null,
+      '.env.example': null,
+      '.env': null,
+      'Gemfile': 'source \'https://rubygems.org\'\n',
+      'Gemfile.lock': 'GEM\n  specs:\n',
+      'Rakefile': 'task :test => :environment\ntask build: :compile\n',
+      'sample.gemspec': 'Gem::Specification.new do |spec|\n  spec.name = \'sample-gem\'\nend\n',
+      'nested/ignored.gemspec': 'Gem::Specification.new do |spec|\n  spec.name = \'nested-gem\'\nend\n',
+    });
+    const brief = await briefFor(fx);
+    const command = (value: string) => brief.commands.find((item) => item.command === value);
+
+    expect(command('bundle install')).toMatchObject({
+      confidence: 'evidence',
+      purpose: 'install',
+      evidence: ['Gemfile', 'Gemfile.lock'],
+    });
+    expect(command('bundle exec rake test')).toMatchObject({ confidence: 'evidence', purpose: 'test', evidence: ['Rakefile'] });
+    expect(command('bundle exec rake build')).toMatchObject({ confidence: 'evidence', purpose: 'build', evidence: ['Rakefile'] });
+    expect(brief.facts).toContainEqual({
+      key: 'ruby-gem-name',
+      statement: 'Ruby gem name: sample-gem',
+      evidence: ['sample.gemspec'],
+    });
+    expect(command('gem install sample-gem')).toMatchObject({ confidence: 'inferred', purpose: 'install', evidence: ['sample.gemspec'] });
+    expect(brief.unknowns).toContain('Whether "sample-gem" is published to RubyGems was not verified.');
+    expect(brief.files.find((file) => file.path === 'sample.gemspec')?.category).toBe('manifest');
+    expect(brief.files.some((file) => file.path === 'nested/ignored.gemspec')).toBe(false);
+    expect(brief.facts.some((fact) => fact.statement.includes('nested-gem'))).toBe(false);
+  });
+
+  it('qualifies namespaced Rake tasks and uses plain rake without a Gemfile', async () => {
+    const fx = loadFixture('widget', {
+      'package.json': null,
+      'package-lock.json': null,
+      'Rakefile': [
+        'task default: :test',
+        'namespace :db do',
+        '  desc "Migrate"',
+        '  task migrate: :environment do',
+        '    puts "migrating"',
+        '  end',
+        'end',
+        'task :lint',
+      ].join('\n'),
+      'widget.gemspec': "version = '1.0'\nGem::Specification.new 'widget-rb', version do |s|\n  s.summary = 'x'\nend\n",
+    });
+    const brief = await briefFor(fx);
+    const commands = brief.commands.map((item) => item.command);
+
+    expect(commands).toContain('rake db:migrate');
+    expect(commands).toContain('rake lint');
+    expect(commands).not.toContain('rake migrate');
+    expect(commands.some((c) => c.startsWith('bundle '))).toBe(false);
+    expect(brief.facts).toContainEqual({ key: 'ruby-gem-name', statement: 'Ruby gem name: widget-rb', evidence: ['widget.gemspec'] });
+  });
+
+  it('parses Rake task names across nested and closed namespaces', () => {
+    const rakefile = [
+      'task :build',
+      'namespace :test do',
+      '  task :coverage do',
+      '  end',
+      '  namespace "db" do',
+      '    task reset: []',
+      '  end',
+      '  task(:units)',
+      'end',
+      'namespace(:docs) { task :api }',
+      "task 'doc:api'",
+      'if defined?(Gem)',
+      '  namespace :release do',
+      '    task :watch do',
+      '    end',
+      '  end',
+      '  task all: %w[a b]',
+      'end',
+    ].join('\n');
+    expect(rakeTasks(rakefile)).toEqual(['build', 'test:coverage', 'test:db:reset', 'test:units', 'doc:api', 'release:watch', 'all']);
   });
 
   it('excludes .env files and binaries from brief files', async () => {

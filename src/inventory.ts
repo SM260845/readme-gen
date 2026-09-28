@@ -250,7 +250,7 @@ export function categorize(path: string): { category: FileCategory; priority: nu
 
   if (/^readme(\.[a-z]+)?$/i.test(base)) return { category: 'readme', priority: 100 + rootBoost };
   if (/^(licen[cs]e|copying|unlicense)(\.[a-z]+)?$/i.test(base)) return { category: 'license', priority: 90 + rootBoost };
-  if (MANIFESTS.has(base)) return { category: 'manifest', priority: 85 + rootBoost };
+  if (MANIFESTS.has(base) || (depth === 0 && /\.gemspec$/i.test(base))) return { category: 'manifest', priority: 85 + rootBoost };
   if (ENV_EXAMPLE_RE.test(base) || /\.(example|sample|template)(\.[a-z]+)?$/i.test(base) || /^config\.example\./i.test(base)) {
     return { category: 'config-example', priority: 70 + rootBoost };
   }
