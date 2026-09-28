@@ -263,7 +263,7 @@ export function resolveProviderConfig(env: Record<string, string | undefined>, t
   } catch {
     throw new UsageError(`REPO2README_BASE_URL "${baseUrl}" is not a valid URL.`);
   }
-  if (parsed.protocol !== 'https:' && !['localhost', '127.0.0.1', '::1'].includes(parsed.hostname)) {
+  if (parsed.protocol !== 'https:' && !['localhost', '127.0.0.1', '[::1]'].includes(parsed.hostname)) {
     throw new UsageError('REPO2README_BASE_URL must use https (http is only allowed for localhost).');
   }
   const model = env.REPO2README_MODEL?.trim() || (openaiOnly ? OPENAI_DEFAULT_MODEL : DEFAULT_MODEL);

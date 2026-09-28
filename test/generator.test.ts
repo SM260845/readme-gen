@@ -26,6 +26,8 @@ describe('resolveProviderConfig', () => {
     expect(() => resolveProviderConfig({})).toThrow(UsageError);
     expect(() => resolveProviderConfig({ REPO2README_API_KEY: 'k', REPO2README_BASE_URL: 'http://evil.example.com' })).toThrow(/https/);
     expect(resolveProviderConfig({ REPO2README_API_KEY: 'k', REPO2README_BASE_URL: 'http://localhost:8080/v1' }).baseUrl).toBe('http://localhost:8080/v1');
+    expect(resolveProviderConfig({ REPO2README_API_KEY: 'k', REPO2README_BASE_URL: 'http://127.0.0.1:1234/v1' }).baseUrl).toBe('http://127.0.0.1:1234/v1');
+    expect(resolveProviderConfig({ REPO2README_API_KEY: 'k', REPO2README_BASE_URL: 'http://[::1]:11434/v1' }).baseUrl).toBe('http://[::1]:11434/v1');
   });
 });
 

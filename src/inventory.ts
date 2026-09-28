@@ -88,6 +88,9 @@ const VENDORED_DIRS = new Set(['vendor', 'vendors', 'third_party', 'third-party'
 
 const GENERATED_DIRS = new Set(['dist', 'build', 'out', 'target', '.next', '.nuxt', '.output', 'coverage', '.cache', '.parcel-cache', '.git', '.svn', '.idea', '.vscode', 'obj']);
 
+/** Test data directories: listed in the inventory, never read (their READMEs and manifests describe fake projects). */
+const FIXTURE_DIRS = new Set(['fixtures', '__fixtures__', 'testdata', 'test-data', '__snapshots__']);
+
 const BINARY_EXT = new Set(
   (
     'png jpg jpeg gif bmp ico icns webp avif tif tiff psd ai sketch fig svgz heic ' +
@@ -247,6 +250,8 @@ export function categorize(path: string): { category: FileCategory; priority: nu
   const ext = extname(base);
   // Higher priority = read first. Root-level files get a boost.
   const rootBoost = depth === 0 ? 10 : Math.max(0, 5 - depth * 2);
+
+  if (path.split('/').slice(0, -1).some((d) => FIXTURE_DIRS.has(d.toLowerCase()))) return { category: 'other', priority: 0 };
 
   if (/^readme(\.[a-z]+)?$/i.test(base)) return { category: 'readme', priority: 100 + rootBoost };
   if (/^(licen[cs]e|copying|unlicense)(\.[a-z]+)?$/i.test(base)) return { category: 'license', priority: 90 + rootBoost };

@@ -91,6 +91,23 @@ describe('buildInventory', () => {
     expect(inv.selected.reduce((n, s) => n + s.size, 0)).toBeLessThanOrEqual(4000);
   });
 
+  it('lists but never reads test fixtures and snapshots', () => {
+    const inv = buildInventory(
+      [
+        blob('README.md'),
+        blob('test/fixtures/app/README.md'),
+        blob('test/fixtures/app/package.json'),
+        blob('src/__fixtures__/index.ts'),
+        blob('pkg/testdata/go.mod'),
+        blob('test/__snapshots__/cli.test.ts.snap'),
+      ],
+      false,
+    );
+    expect(inv.selected.map((s) => s.path)).toEqual(['README.md']);
+    expect(inv.paths).toContain('test/fixtures/app/README.md');
+    expect(categorize('test/fixtures/app/package.json').category).toBe('other');
+  });
+
   it('caps CI workflow files per category', () => {
     const entries = Array.from({ length: 6 }, (_, i) => blob(`.github/workflows/w${i}.yml`));
     const inv = buildInventory(entries, false);

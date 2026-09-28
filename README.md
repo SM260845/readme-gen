@@ -3,7 +3,7 @@
 **Turn any public GitHub repository into a polished README draft in one command, with every command, link, badge and license claim traced to the source or flagged for review.**
 
 [![CI](https://github.com/SM260845/repo2readme/actions/workflows/ci.yml/badge.svg)](https://github.com/SM260845/repo2readme/actions/workflows/ci.yml)
-[![npm](https://img.shields.io/npm/v/repo2readme)](https://www.npmjs.com/package/repo2readme)
+[![npm](https://img.shields.io/npm/v/repo2readme?cacheSeconds=3600)](https://www.npmjs.com/package/repo2readme)
 [![License: MIT](https://img.shields.io/github/license/SM260845/repo2readme)](LICENSE)
 ![Node.js 22+](https://img.shields.io/badge/node-%3E%3D22-339933)
 
@@ -244,19 +244,20 @@ The model must support `response_format: { type: "json_schema" }`. Keys are read
 ## Options
 
 ```text
-repo2readme [url] [options]
+repo2readme [options] [url]
 
-  -s, --style <style>     professional | trendy | minimalist | comprehensive
-  -o, --output <path>     output file (default README.generated.md); an explicit path may overwrite an existing file
-  -f, --force             overwrite README.generated.md if it already exists
-      --dry-run           print the README to stdout, write nothing
-      --max-files <n>     maximum files to read (default 40)
-      --max-bytes <n>     maximum total bytes read (default 250000)
-      --max-file-bytes <n> skip files larger than this (default 60000)
-      --timeout <ms>      GitHub request timeout (default 15000)
-      --gen-timeout <ms>  generation request timeout (default 120000)
-  -v, --verbose           list every GitHub request made
-  -h, --help / -V, --version
+  -s, --style <style>       professional | trendy | minimalist | comprehensive
+  -o, --output <path>       output file (default README.generated.md); an explicit path may overwrite an existing file
+  -f, --force               overwrite README.generated.md if it already exists
+      --dry-run             print the README to stdout, write nothing
+      --max-files <n>       maximum files to read (default 40)
+      --max-bytes <n>       maximum total bytes read (default 250000)
+      --max-file-bytes <n>  skip files larger than this (default 60000)
+      --timeout <ms>        GitHub request timeout (default 15000)
+      --gen-timeout <ms>    generation request timeout (default 120000)
+  -v, --verbose             list every GitHub request made
+  -V, --version             print the version
+  -h, --help                show help
 ```
 
 Overwrite rules: the default `README.generated.md` is never replaced unless you pass `--force`. Naming a file with `--output` counts as asking to write there, so an existing file at that path will be replaced. Writes are atomic: repo2readme writes a temp file in the same directory, then renames it into place.
@@ -284,7 +285,7 @@ The draft is rejected outright, with nothing written, if it has no `#` title, ha
 ## Data handling
 
 - **What is read:** repository metadata, topics, languages, the latest release, the file tree, and up to `--max-files` high-signal files: README and docs, LICENSE, manifests and lockfiles, config examples (`.env.example`, `*.sample`), CI workflows, Docker and build files, and source entry points.
-- **What is never read:** secrets (`.env*` other than the example variants, `*.pem`, `*.key`, `id_rsa`, `.npmrc`, `credentials*`, `secrets.*`, `*.tfstate`, …), binaries and media, dependency directories (`node_modules`, `.venv`, `vendor`, `third_party`, …), build output (`dist`, `build`, `target`, …), minified bundles, and files over the size limits.
+- **What is never read:** secrets (`.env*` other than the example variants, `*.pem`, `*.key`, `id_rsa`, `.npmrc`, `credentials*`, `secrets.*`, `*.tfstate`, …), binaries and media, dependency directories (`node_modules`, `.venv`, `vendor`, `third_party`, …), build output (`dist`, `build`, `target`, …), minified bundles, and files over the size limits. Test fixtures and snapshots (`fixtures/`, `__fixtures__/`, `testdata/`, `__snapshots__/`) are listed in the file tree but not read, so they cannot be mistaken for the project itself.
 - **Secret scanning:** every file is scanned before it enters the brief. Private keys, cloud and API tokens, JWTs, credentials in URLs and hard-coded passwords are replaced with `[REDACTED]`, and a warning names the file. The generated README is scanned again before it is written.
 - **Where data goes:** the brief (metadata plus the redacted file excerpts) is sent only to the generation endpoint you configured. Nothing is sent anywhere else, and nothing is cached or stored besides the output file.
 - **Prompt-injection hardening:** the model is told that repository content is untrusted data, and every command, link, badge and license claim in its output is checked against the evidence anyway.
@@ -346,9 +347,10 @@ node bin/repo2readme.js https://github.com/sindresorhus/is-plain-obj --style com
 ```
 
 CI runs lint, typecheck, test and build on Node 22 and 24 (`.github/workflows/ci.yml`).
+
 ## Roadmap
 
-repo2readme is intentionally narrow for now: public repositories only, and output stays local (or becomes a CI artifact). Planned next (see the [v0.2.0 milestone](https://github.com/SM260845/repo2readme/milestone/1)):
+repo2readme is intentionally narrow for now: public repositories only, and output stays local (or becomes a CI artifact). Planned next (see the [roadmap milestone](https://github.com/SM260845/repo2readme/milestone/1)):
 
 - More ecosystem detectors: [Deno tasks #1](https://github.com/SM260845/repo2readme/issues/1)
 - [Snapshot tests for every style #3](https://github.com/SM260845/repo2readme/issues/3)
@@ -356,7 +358,7 @@ repo2readme is intentionally narrow for now: public repositories only, and outpu
 
 Later: [opt-in private repos #6](https://github.com/SM260845/repo2readme/issues/6), [draft-PR mode #7](https://github.com/SM260845/repo2readme/issues/7), [localized READMEs #8](https://github.com/SM260845/repo2readme/issues/8).
 
-Known limitations: monorepos are summarised from the root, and package-level manifests deeper in the tree get lower priority. Images and themes are out of scope for v1.
+Known limitations: monorepos are summarized from the root, and package-level manifests deeper in the tree get lower priority. Images and themes are out of scope for v1.
 
 ## Contributing
 
