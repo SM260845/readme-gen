@@ -3,7 +3,7 @@
 **Turn any public GitHub repository into a polished README draft in one command, with every command, link, badge and license claim traced to the source or flagged for review.**
 
 [![CI](https://github.com/SM260845/repo2readme/actions/workflows/ci.yml/badge.svg)](https://github.com/SM260845/repo2readme/actions/workflows/ci.yml)
-[![npm](https://img.shields.io/npm/v/repo2readme?cacheSeconds=3600)](https://www.npmjs.com/package/repo2readme)
+[![npm](https://img.shields.io/npm/v/repo2readme?cacheSeconds=300)](https://www.npmjs.com/package/repo2readme)
 [![License: MIT](https://img.shields.io/github/license/SM260845/repo2readme)](LICENSE)
 ![Node.js 22+](https://img.shields.io/badge/node-%3E%3D22-339933)
 
