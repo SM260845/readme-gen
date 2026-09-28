@@ -274,7 +274,7 @@ export function validateReadme(rendered: string, brief: ProjectBrief, generatorW
     const badge = isImage && isBadgeUrl(url);
     const kind: ClaimKind = badge ? 'badge' : 'url';
     if (!/^https?:\/\//i.test(url)) {
-      const p = decodeURIComponent(url.replace(/^\.\//, '').replace(/[#?].*$/, '').replace(/\/$/, ''));
+      const p = safeDecode(url.replace(/^\.\//, '').replace(/[#?].*$/, '').replace(/\/$/, ''));
       if (pathSet.has(p) || dirSet.has(p)) claims.push({ kind, value: url, line, evidence: [p] });
       else claims.push({ kind, value: url, line, evidence: null, note: 'relative link to a file not found in the repository' });
       return;
@@ -294,7 +294,7 @@ export function validateReadme(rendered: string, brief: ProjectBrief, generatorW
     }
     const blob = n.match(new RegExp(`^${escapeRe(repoUrl)}/(?:blob|tree|raw)/([^/]+)/(.+)$`));
     if (blob && blob[1] === branch) {
-      const orig = decodeURIComponent(url.replace(/[#?].*$/, '').replace(/\/+$/, '')).split('/').slice(7).join('/');
+      const orig = safeDecode(url.replace(/[#?].*$/, '').replace(/\/+$/, '')).split('/').slice(7).join('/');
       if (pathSet.has(orig) || dirSet.has(orig)) {
         claims.push({ kind, value: url, line, evidence: [orig] });
         return;
@@ -366,6 +366,15 @@ function dedupeClaims(claims: Claim[]): Claim[] {
     seen.add(k);
     return true;
   });
+}
+
+/** decodeURIComponent that returns the input unchanged for malformed escapes (e.g. `100%.md`) instead of throwing. */
+function safeDecode(s: string): string {
+  try {
+    return decodeURIComponent(s);
+  } catch {
+    return s;
+  }
 }
 
 function escapeRe(s: string): string {

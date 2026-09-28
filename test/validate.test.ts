@@ -133,6 +133,14 @@ describe('validateReadme', () => {
     expect(r.warnings.join()).toMatch(/Redacted 1 potential secret/);
   });
 
+  it('flags links with malformed percent-escapes instead of throwing', async () => {
+    const brief = await briefFor(loadFixture('widget'));
+    const md = renderMarkdown(gen([{ heading: 'Docs', body: 'See [coverage](docs/100%.md) and [raw](https://github.com/acme/widget/blob/main/50%zz).' }]), brief);
+    const r = validateReadme(md, brief);
+    expect(r.errors).toEqual([]);
+    expect(r.unverified.map((c) => c.value)).toEqual(expect.arrayContaining(['docs/100%.md', 'https://github.com/acme/widget/blob/main/50%zz']));
+  });
+
   it('warns on anchors that do not match a heading', async () => {
     const brief = await briefFor(loadFixture('widget'));
     const r = validateReadme(renderMarkdown(gen([{ heading: 'Overview', body: '[x](#usage) [y](#overview)' }]), brief), brief);

@@ -442,7 +442,6 @@ export function extractDocCommands(markdown: string): string[] {
     if (!t || t.startsWith('#')) continue;
     // In untagged/console blocks, only lines that look like commands.
     if ((fenceLang === '' || fenceLang === 'console') && !/^(\$|>)\s/.test(t) && !looksLikeCommand(t)) continue;
-    if (fenceLang === 'console' && !/^(\$|>)\s/.test(t) && !looksLikeCommand(t)) continue;
     out.push(normalizeCommand(t));
   }
   return [...new Set(out)];

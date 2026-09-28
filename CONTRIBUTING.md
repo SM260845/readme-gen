@@ -6,7 +6,7 @@ Thanks for helping. This guide should get you from clone to merged PR quickly.
 
 - **Try it on a repository you know well** and report what it got wrong. Bad output is the most useful bug report we can get.
 - **Request or refine a style.** Use the *Style request* issue template.
-- **Pick up an issue** labelled [`good first issue`](https://github.com/SM260845/repo2readme/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) or [`help wanted`](https://github.com/SM260845/repo2readme/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22).
+- **Pick up an issue** labeled [`good first issue`](https://github.com/SM260845/repo2readme/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) or [`help wanted`](https://github.com/SM260845/repo2readme/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22).
 - **Ask or suggest** in [Discussions](https://github.com/SM260845/repo2readme/discussions).
 
 ## Development setup
@@ -62,7 +62,7 @@ Implement `ReadmeProvider` (`generateReadme(brief, style): Promise<GeneratedRead
 
 ## Pull requests
 
-- Keep PRs focused. Add or update tests with every behaviour change.
+- Keep PRs focused. Add or update tests with every behavior change.
 - `npm run lint`, `npm run typecheck`, `npm test` and `npm run build` must all pass. CI runs the same checks.
 - Update `CHANGELOG.md` under **Unreleased**.
 - By contributing, you agree your work is licensed under the [MIT License](LICENSE) and that you will follow the [Code of Conduct](CODE_OF_CONDUCT.md).

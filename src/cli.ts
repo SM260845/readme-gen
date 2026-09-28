@@ -7,7 +7,7 @@ import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { buildBrief } from './brief.js';
 import { ExitCode, Repo2ReadmeError, UsageError, ValidationError } from './errors.js';
-import { FixtureProvider, OpenAICompatibleProvider, resolveProviderConfig, type ReadmeProvider } from './generator.js';
+import { DEFAULT_BASE_URL, DEFAULT_MODEL, FixtureProvider, OpenAICompatibleProvider, resolveProviderConfig, type ReadmeProvider } from './generator.js';
 import { GitHubClient, parseRepoUrl, type FetchLike, type RepoRef } from './github.js';
 import { buildInventory, DEFAULT_LIMITS, type InventoryLimits } from './inventory.js';
 import { DEFAULT_OUTPUT, exists, formatSummary, resolveOutputPath, writeFileAtomic } from './output.js';
@@ -90,9 +90,9 @@ ${STYLE_IDS.map((s) => `  ${s.padEnd(14)} ${STYLES[s].summary}`).join('\n')}
 
 Environment:
   GITHUB_TOKEN          optional; raises GitHub rate limits (read-only use)
-  REPO2README_API_KEY     generation API key (or XAI_API_KEY / OPENAI_API_KEY)
-  REPO2README_BASE_URL    OpenAI-compatible endpoint (default https://api.x.ai/v1)
-  REPO2README_MODEL       model name (default grok-4.6)
+  REPO2README_API_KEY   generation API key (or XAI_API_KEY / OPENAI_API_KEY)
+  REPO2README_BASE_URL  OpenAI-compatible endpoint (default ${DEFAULT_BASE_URL})
+  REPO2README_MODEL     model name (default ${DEFAULT_MODEL})
 
 Examples:
   $ repo2readme

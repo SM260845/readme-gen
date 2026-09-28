@@ -4,6 +4,17 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+### Fixed
+
+- A generated link with a malformed percent-escape (for example `docs/100%.md`) no longer crashes validation with "Unexpected error"; it is flagged for review instead.
+- `REPO2README_BASE_URL=http://[::1]:<port>/v1` is now accepted as localhost, as documented.
+- Test fixtures and snapshots (`fixtures/`, `__fixtures__/`, `testdata/`, `__snapshots__/`) are no longer read as if they described the project.
+- `--help`: aligned the Environment section.
+
+### Changed
+
+- Docs: npm badge cache fix, README options block matches `--help`, SECURITY supported versions (0.3.x), bug-report version placeholder, spelling consistency.
+
 ## [0.3.0] - 2026-09-28
 
 ### Added

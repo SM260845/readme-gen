@@ -4,9 +4,11 @@
   "description": "Turn any public GitHub repo into a polished, evidence-backed README draft in one command. Professional, trendy, minimalist or comprehensive, with every command, link and badge traced to the source.",
   "keywords": [
     "readme",
+    "readme-generator",
     "repo2readme",
     "cli",
     "github",
+    "github-action",
     "documentation",
     "markdown",
     "llm",
