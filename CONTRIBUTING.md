@@ -1,4 +1,4 @@
-# Contributing to readme-gen
+# Contributing to readme-generator
 
 Thanks for helping. This guide should get you from clone to merged PR quickly.
 
@@ -6,16 +6,16 @@ Thanks for helping. This guide should get you from clone to merged PR quickly.
 
 - **Try it on a repository you know well** and report what it got wrong. Bad output is the most useful bug report we can get.
 - **Request or refine a style.** Use the *Style request* issue template.
-- **Pick up an issue** labelled [`good first issue`](https://github.com/SM260845/readme-gen/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) or [`help wanted`](https://github.com/SM260845/readme-gen/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22).
-- **Ask or suggest** in [Discussions](https://github.com/SM260845/readme-gen/discussions).
+- **Pick up an issue** labelled [`good first issue`](https://github.com/SM260845/readme-generator/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) or [`help wanted`](https://github.com/SM260845/readme-generator/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22).
+- **Ask or suggest** in [Discussions](https://github.com/SM260845/readme-generator/discussions).
 
 ## Development setup
 
 You need Node.js 22 or newer.
 
 ```sh
-git clone https://github.com/SM260845/readme-gen.git
-cd readme-gen
+git clone https://github.com/SM260845/readme-generator.git
+cd readme-generator
 npm install
 npm run lint && npm run typecheck && npm test && npm run build
 ```
@@ -23,7 +23,7 @@ npm run lint && npm run typecheck && npm test && npm run build
 Run the CLI from source without an LLM key. The hidden `--provider fixture` flag uses a deterministic generator; the GitHub calls are real:
 
 ```sh
-node bin/readme-gen.js https://github.com/sindresorhus/is-plain-obj --style trendy --dry-run --provider fixture --verbose
+node bin/readme-generator.js https://github.com/sindresorhus/is-plain-obj --style trendy --dry-run --provider fixture --verbose
 ```
 
 Set `GITHUB_TOKEN` if you hit the anonymous rate limit (60 requests/hour).

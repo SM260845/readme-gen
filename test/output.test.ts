@@ -5,7 +5,7 @@ import { describe, expect, it } from 'vitest';
 import { OutputError } from '../src/errors.js';
 import { DEFAULT_OUTPUT, resolveOutputPath, writeFileAtomic } from '../src/output.js';
 
-const tmp = () => mkdtemp(path.join(os.tmpdir(), 'readme-gen-test-'));
+const tmp = () => mkdtemp(path.join(os.tmpdir(), 'readme-generator-test-'));
 
 describe('resolveOutputPath', () => {
   it('defaults to README.generated.md', async () => {

@@ -4,6 +4,19 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-09-28
+
+### Changed
+
+- **Renamed to readme-generator.** The npm package is `@sm260845/readme-generator`, the main command is `readme-generator` (`readme-gen` still works as an alias), and the repository moved to `SM260845/readme-generator` (old URLs redirect). The `READMEGEN_*` environment variables are unchanged.
+- Dependencies: @inquirer/prompts 8, commander 15, eslint 10, vitest 5. `tsc` is now TypeScript 7; typescript-eslint keeps using the TypeScript 6 API.
+
+### Added
+
+- Composite GitHub Action (`uses: SM260845/readme-generator@v0.2.0`) that generates a README, uploads it as an artifact, and writes the summary to the job summary.
+- `Action self-test` workflow (manual or on action changes) using the fixture provider.
+- Release workflow publishes to npm with provenance when an `NPM_TOKEN` secret is configured.
+
 ## [0.1.0] - 2026-09-28
 
 ### Added
@@ -19,5 +32,6 @@ All notable changes to this project are documented here. The format follows [Kee
 - Prebuilt npm tarball attached to each GitHub release (`npm install --global <tarball URL>`).
 - Atomic writes. `README.generated.md` is never overwritten without `--force`.
 
-[Unreleased]: https://github.com/SM260845/readme-gen/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/SM260845/readme-gen/releases/tag/v0.1.0
+[Unreleased]: https://github.com/SM260845/readme-generator/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/SM260845/readme-generator/compare/v0.1.0...v0.2.0
+[0.1.0]: https://github.com/SM260845/readme-generator/releases/tag/v0.1.0

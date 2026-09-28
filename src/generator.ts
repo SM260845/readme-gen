@@ -308,7 +308,7 @@ export class OpenAICompatibleProvider implements ReadmeProvider {
           'Content-Type': 'application/json',
           Accept: 'application/json',
           Authorization: `Bearer ${this.config.apiKey}`,
-          'User-Agent': 'readme-gen',
+          'User-Agent': 'readme-generator',
         },
         body: JSON.stringify(body),
         signal: controller.signal,

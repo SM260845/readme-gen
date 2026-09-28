@@ -36,5 +36,5 @@ jobs:
       - run: npm run build
       - name: Smoke test the CLI entry point
         run: |
-          node bin/readme-gen.js --help
-          node bin/readme-gen.js --version
+          node bin/readme-generator.js --help
+          node bin/readme-generator.js --version

@@ -1,6 +1,7 @@
-# Attaches an installable npm tarball to each published GitHub release.
-# Uses only the built-in GITHUB_TOKEN; npm publishing is intentionally not automated yet.
-name: Release assets
+# On each published GitHub release:
+#  1. attach an installable npm tarball to the release (built-in GITHUB_TOKEN only);
+#  2. publish to npm with provenance, only if the NPM_TOKEN repository secret is set.
+name: Release
 
 on:
   release:
@@ -30,4 +31,42 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           TAG: ${{ github.event.release.tag_name }}
-        run: gh release upload "$TAG" readme-gen-*.tgz --clobber --repo "$GITHUB_REPOSITORY"
+        run: gh release upload "$TAG" ./*.tgz --clobber --repo "$GITHUB_REPOSITORY"
+
+  npm:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      id-token: write # npm provenance
+    env:
+      NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+    steps:
+      - name: Check for NPM_TOKEN
+        id: check
+        run: |
+          if [ -n "$NODE_AUTH_TOKEN" ]; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::NPM_TOKEN secret is not set; skipping npm publish."
+          fi
+      - if: steps.check.outputs.enabled == 'true'
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - if: steps.check.outputs.enabled == 'true'
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+          cache: npm
+          registry-url: https://registry.npmjs.org
+      - if: steps.check.outputs.enabled == 'true'
+        run: npm ci
+      - if: steps.check.outputs.enabled == 'true'
+        name: Verify the tag matches package.json
+        env:
+          TAG: ${{ github.event.release.tag_name }}
+        run: test "v$(node -p "require('./package.json').version")" = "$TAG"
+      - if: steps.check.outputs.enabled == 'true'
+        run: npm publish --provenance --access public

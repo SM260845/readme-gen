@@ -1,0 +1,108 @@
+name: readme-generator
+description: Draft an evidence-backed README for a public GitHub repository and publish it as an artifact for review.
+author: SM260845
+branding:
+  icon: book-open
+  color: blue
+
+inputs:
+  repo-url:
+    description: Public repository URL to document. Defaults to the repository running the workflow.
+    required: false
+    default: ""
+  style:
+    description: "Writing style: professional, trendy, minimalist or comprehensive."
+    required: false
+    default: professional
+  output:
+    description: Output file path, relative to the workspace.
+    required: false
+    default: README.generated.md
+  provider:
+    description: "Generation provider: 'openai' (real OpenAI-compatible endpoint, needs api-key) or 'fixture' (deterministic, no key)."
+    required: false
+    default: openai
+  api-key:
+    description: API key for the generation endpoint (pass a secret). Exposed to the CLI as READMEGEN_API_KEY.
+    required: false
+    default: ""
+  base-url:
+    description: OpenAI-compatible base URL (READMEGEN_BASE_URL). Defaults to https://api.x.ai/v1.
+    required: false
+    default: ""
+  model:
+    description: Model name (READMEGEN_MODEL). Defaults to grok-4.6.
+    required: false
+    default: ""
+  github-token:
+    description: Token used for read-only GitHub API requests (raises rate limits).
+    required: false
+    default: ${{ github.token }}
+  upload-artifact:
+    description: Upload the generated README as a workflow artifact ('true' or 'false').
+    required: false
+    default: "true"
+  artifact-name:
+    description: Name of the uploaded artifact.
+    required: false
+    default: readme-generated
+
+outputs:
+  path:
+    description: Absolute path of the generated README.
+    value: ${{ steps.run.outputs.path }}
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+      with:
+        node-version: 22
+
+    - name: Install readme-generator
+      shell: bash
+      working-directory: ${{ github.action_path }}
+      run: npm ci --no-audit --no-fund --loglevel=error # also builds dist/ via the prepare script
+
+    - name: Generate README
+      id: run
+      shell: bash
+      env:
+        # Inputs go through env (never interpolated into the script) to avoid injection.
+        INPUT_REPO_URL: ${{ inputs.repo-url }}
+        DEFAULT_REPO_URL: ${{ github.server_url }}/${{ github.repository }}
+        INPUT_STYLE: ${{ inputs.style }}
+        INPUT_OUTPUT: ${{ inputs.output }}
+        INPUT_PROVIDER: ${{ inputs.provider }}
+        GITHUB_TOKEN: ${{ inputs.github-token }}
+        READMEGEN_API_KEY: ${{ inputs.api-key }}
+        READMEGEN_BASE_URL: ${{ inputs.base-url }}
+        READMEGEN_MODEL: ${{ inputs.model }}
+        CLI: ${{ github.action_path }}/bin/readme-generator.js
+      run: |
+        set -euo pipefail
+        repo="${INPUT_REPO_URL:-$DEFAULT_REPO_URL}"
+        case "$INPUT_PROVIDER" in
+          openai|real) provider=openai ;;
+          fixture) provider=fixture ;;
+          *) echo "::error::provider must be 'openai' or 'fixture' (got '$INPUT_PROVIDER')"; exit 2 ;;
+        esac
+        summary="$(mktemp)"
+        node "$CLI" "$repo" --style "$INPUT_STYLE" --output "$INPUT_OUTPUT" --provider "$provider" | tee "$summary"
+        path="$(realpath "$INPUT_OUTPUT")"
+        echo "path=$path" >> "$GITHUB_OUTPUT"
+        {
+          echo "## readme-generator"
+          echo
+          echo '```text'
+          cat "$summary"
+          echo '```'
+        } >> "$GITHUB_STEP_SUMMARY"
+
+    - name: Upload generated README
+      if: ${{ inputs.upload-artifact == 'true' }}
+      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      with:
+        name: ${{ inputs.artifact-name }}
+        path: ${{ steps.run.outputs.path }}
+        if-no-files-found: error

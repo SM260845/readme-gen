@@ -36,7 +36,7 @@ This Code of Conduct applies within all community spaces, and also applies when 
 
 ## Enforcement
 
-Instances of abusive, harassing, or otherwise unacceptable behavior may be reported to the community leaders responsible for enforcement privately, through the repository's [private reporting form](https://github.com/SM260845/readme-gen/security/advisories/new) (start the title with "Code of Conduct:"). Only the maintainers can see these reports. You can also contact the project maintainer, [@SM260845](https://github.com/SM260845), directly on GitHub. All complaints will be reviewed and investigated promptly and fairly.
+Instances of abusive, harassing, or otherwise unacceptable behavior may be reported to the community leaders responsible for enforcement privately, through the repository's [private reporting form](https://github.com/SM260845/readme-generator/security/advisories/new) (start the title with "Code of Conduct:"). Only the maintainers can see these reports. You can also contact the project maintainer, [@SM260845](https://github.com/SM260845), directly on GitHub. All complaints will be reviewed and investigated promptly and fairly.
 
 All community leaders are obligated to respect the privacy and security of the reporter of any incident.
 

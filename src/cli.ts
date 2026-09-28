@@ -1,5 +1,5 @@
 /**
- * readme-gen CLI entry point. `run()` is dependency-injected so the whole flow
+ * readme-generator CLI entry point. `run()` is dependency-injected so the whole flow
  * can be exercised in tests with a mocked fetch and no network.
  */
 import { Command, CommanderError, InvalidArgumentError, Option } from 'commander';
@@ -67,7 +67,7 @@ function positiveInt(label: string) {
 export function buildProgram(): Command {
   const program = new Command();
   program
-    .name('readme-gen')
+    .name('readme-generator')
     .description('Generate a polished, evidence-backed README for a public GitHub repository.\nThe original README is never touched; output goes to README.generated.md by default.')
     .version(readVersion(), '-V, --version')
     .argument('[url]', 'public repository URL, e.g. https://github.com/acme/widget')
@@ -95,9 +95,9 @@ Environment:
   READMEGEN_MODEL       model name (default grok-4.6)
 
 Examples:
-  $ readme-gen
-  $ readme-gen https://github.com/acme/widget --style professional
-  $ readme-gen https://github.com/acme/widget -s minimalist --dry-run`,
+  $ readme-generator
+  $ readme-generator https://github.com/acme/widget --style professional
+  $ readme-generator https://github.com/acme/widget -s minimalist --dry-run`,
     );
   return program;
 }
@@ -156,7 +156,7 @@ export async function run(argv: string[], deps: CliDeps = {}): Promise<number> {
 
     // 1. Repository URL
     if (!urlArg) {
-      if (!isTTY) throw new UsageError('Missing repository URL.', 'Usage: readme-gen <https://github.com/owner/repo> --style <professional|trendy|minimalist|comprehensive>');
+      if (!isTTY) throw new UsageError('Missing repository URL.', 'Usage: readme-generator <https://github.com/owner/repo> --style <professional|trendy|minimalist|comprehensive>');
       interactive = true;
       urlArg = await (await getPrompts()).input({
         message: 'GitHub repository URL:',

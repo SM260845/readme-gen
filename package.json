@@ -1,6 +1,6 @@
 {
-  "name": "readme-gen",
-  "version": "0.1.0",
+  "name": "@sm260845/readme-generator",
+  "version": "0.2.0",
   "description": "Turn any public GitHub repo into a polished, evidence-backed README draft in one command. Professional, trendy, minimalist or comprehensive, with every command, link and badge traced to the source.",
   "keywords": [
     "readme",
@@ -14,19 +14,20 @@
     "developer-tools",
     "typescript"
   ],
-  "homepage": "https://github.com/SM260845/readme-gen#readme",
+  "homepage": "https://github.com/SM260845/readme-generator#readme",
   "bugs": {
-    "url": "https://github.com/SM260845/readme-gen/issues"
+    "url": "https://github.com/SM260845/readme-generator/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/SM260845/readme-gen.git"
+    "url": "git+https://github.com/SM260845/readme-generator.git"
   },
   "license": "MIT",
   "author": "Harry White (https://github.com/SM260845)",
   "type": "module",
   "bin": {
-    "readme-gen": "bin/readme-gen.js"
+    "readme-generator": "bin/readme-generator.js",
+    "readme-gen": "bin/readme-generator.js"
   },
   "files": [
     "bin",
@@ -34,10 +35,14 @@
     "!dist/**/*.map",
     "README.md",
     "LICENSE",
-    "CHANGELOG.md"
+    "CHANGELOG.md",
+    "action.yml"
   ],
   "engines": {
     "node": ">=22"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
