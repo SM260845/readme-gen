@@ -3,6 +3,7 @@
 **Turn any public GitHub repository into a polished README draft in one command, with every command, link, badge and license claim traced to the source or flagged for review.**
 
 [![CI](https://github.com/SM260845/repo2readme/actions/workflows/ci.yml/badge.svg)](https://github.com/SM260845/repo2readme/actions/workflows/ci.yml)
+[![README check](https://github.com/SM260845/repo2readme/actions/workflows/readme-check.yml/badge.svg)](https://github.com/SM260845/repo2readme/actions/workflows/readme-check.yml)
 [![npm](https://img.shields.io/npm/v/repo2readme?cacheSeconds=300)](https://www.npmjs.com/package/repo2readme)
 [![License: MIT](https://img.shields.io/github/license/SM260845/repo2readme)](LICENSE)
 ![Node.js 22+](https://img.shields.io/badge/node-%3E%3D22-339933)
@@ -80,6 +81,7 @@ Released under the MIT license. See [license](license).
 - [Data handling](#data-handling)
 - [How it works](#how-it-works)
 - [Exit codes](#exit-codes)
+- [This README is checked by its own tool](#this-readme-is-checked-by-its-own-tool)
 - [Development](#development)
 - [Roadmap](#roadmap)
 - [Contributing](#contributing)
@@ -307,6 +309,8 @@ flowchart LR
 ```text
 src/
   cli.ts        argument parsing, prompts, orchestration, summary
+  check.ts      offline README self-check (repo2readme check)
+  errors.ts     error types and exit codes
   github.ts     URL validation and a read-only GitHub client (REST + raw URLs, timeouts, pagination, error mapping)
   inventory.ts  file classification, exclusion rules and selection limits
   brief.ts      the structured project brief: facts, commands and evidence, unknowns, warnings
@@ -330,6 +334,25 @@ src/
 | 6 | Output error (file exists without `--force`, not writable) |
 | 130 | Cancelled at a prompt |
 
+## This README is checked by its own tool
+
+repo2readme exists to keep READMEs evidence-backed, so this README is held to the same rule. The [README check workflow](.github/workflows/readme-check.yml) runs `repo2readme check README.md` on every push and pull request that touches the README, `package.json`, `src/` or `action.yml`, and again every week. It needs no API key and makes no network calls. It fails if any of these claims drift from the repository:
+
+- **npm scripts**: every `npm run <script>` or `npm test` shown here exists in `package.json`.
+- **Files and paths**: relative links, repository paths in backticks, and `node <file>` commands point to files that exist.
+- **Versions**: the Action tag (`SM260845/repo2readme@v…`), the release link and the tarball name all match the `package.json` version.
+- **CLI flags**: every flag used in a `repo2readme` command is one the CLI accepts, and the [Options](#options) block lists exactly the flags in `--help`.
+- **Node.js engine**: "Node.js 22 or newer" and the Node badge match `engines.node`.
+- **Anchors**: every `#section` link resolves to a heading.
+- **Action inputs and layout**: every `with:` key in the Action example is declared in `action.yml`, and the `src/` layout under [How it works](#how-it-works) lists exactly the files in `src/`.
+
+You can run the same check on any Node.js project's README:
+
+```sh
+repo2readme check README.md          # exits 5 and lists each drifted claim
+npm run check:readme                 # in this repository: build, then check README.md
+```
+
 ## Development
 
 ```sh
@@ -346,14 +369,13 @@ Tests live in `test/`, and the fixture repositories in `test/fixtures/`. A hidde
 node bin/repo2readme.js https://github.com/sindresorhus/is-plain-obj --style comprehensive --dry-run --provider fixture --verbose
 ```
 
-CI runs lint, typecheck, test and build on Node 22 and 24 (`.github/workflows/ci.yml`).
+CI runs lint, typecheck, test and build on Node 22 and 24 (`.github/workflows/ci.yml`). The README self-check runs in `.github/workflows/readme-check.yml`.
 
 ## Roadmap
 
 repo2readme is intentionally narrow for now: public repositories only, and output stays local (or becomes a CI artifact). Planned next (see the [roadmap milestone](https://github.com/SM260845/repo2readme/milestone/1)):
 
 - More ecosystem detectors: [Deno tasks #1](https://github.com/SM260845/repo2readme/issues/1)
-- [Snapshot tests for every style #3](https://github.com/SM260845/repo2readme/issues/3)
 - [Local models (Ollama, LM Studio) #4](https://github.com/SM260845/repo2readme/issues/4)
 
 Later: [opt-in private repos #6](https://github.com/SM260845/repo2readme/issues/6), [draft-PR mode #7](https://github.com/SM260845/repo2readme/issues/7), [localized READMEs #8](https://github.com/SM260845/repo2readme/issues/8).

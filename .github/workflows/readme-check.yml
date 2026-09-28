@@ -1,0 +1,63 @@
+# Keeps repo2readme's own README evidence-backed: `repo2readme check README.md`
+# verifies npm scripts, paths, versions, CLI flags, the Node.js engine, anchors,
+# Action inputs and the src/ layout against the repository. Offline and keyless.
+name: README check
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - README.md
+      - package.json
+      - package-lock.json
+      - action.yml
+      - src/**
+      - bin/**
+      - .github/workflows/readme-check.yml
+  pull_request:
+    paths:
+      - README.md
+      - package.json
+      - package-lock.json
+      - action.yml
+      - src/**
+      - bin/**
+      - .github/workflows/readme-check.yml
+  schedule:
+    - cron: "17 3 * * 1" # weekly, Monday 03:17 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: readme-check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: README claims match the repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci # also builds dist/ via the prepare script
+      - name: Check README.md against the repository
+        run: |
+          set -o pipefail
+          node bin/repo2readme.js check README.md 2>&1 | tee check.log
+      - name: Job summary
+        if: always()
+        run: |
+          {
+            echo "### README check"
+            echo '```'
+            cat check.log 2>/dev/null || echo "check did not run"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
