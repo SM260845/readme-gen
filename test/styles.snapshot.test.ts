@@ -1,27 +1,25 @@
-import { describe, expect, it } from "vitest";
-import { STYLE_IDS } from "../src/styles.js";
-import { cli } from "./cli-helpers.js";
+/**
+ * Full-output snapshots of the deterministic FixtureProvider for every style
+ * and fixture. A silently dropped section or changed heading fails here.
+ * After an intentional output change, refresh with `npx vitest -u` and review
+ * the diff in `test/__snapshots__/`.
+ */
+import { describe, expect, it } from 'vitest';
+import { STYLE_IDS } from '../src/styles.js';
+import { cli } from './cli-helpers.js';
 
-const fixtures = ["widget", "pyapp"] as const;
+const FIXTURES = {
+  widget: 'https://github.com/acme/widget',
+  pyapp: 'https://github.com/someone/pyapp',
+} as const;
 
-describe("CLI style snapshots", () => {
-  it.each(
-    fixtures.flatMap((fixture) =>
-      STYLE_IDS.map((style) => [fixture, style] as const),
-    ),
-  )("%s with %s style", async (fixture, style) => {
-    const repository =
-      fixture === "widget"
-        ? "https://github.com/acme/widget"
-        : "https://github.com/someone/pyapp";
-    const result = await cli(
-      [repository, "--style", style, "--dry-run", "--provider", "fixture"],
-      { fixture },
-    );
+const cases = Object.entries(FIXTURES).flatMap(([fixture, url]) => STYLE_IDS.map((style) => [fixture, style, url] as const));
 
-    expect(result.code).toBe(0);
-    await expect(result.out).toMatchFileSnapshot(
-      `__snapshots__/${fixture}-${style}.md`,
-    );
+describe('CLI style snapshots', () => {
+  it.each(cases)('%s with %s style matches its snapshot', async (fixture, style, url) => {
+    const r = await cli([url, '--style', style, '--dry-run', '--provider', 'fixture'], { fixture });
+    expect(r.code).toBe(0);
+    expect(r.err).not.toMatch(/Unexpected error/);
+    await expect(r.out).toMatchFileSnapshot(`__snapshots__/${fixture}-${style}.md`);
   });
 });
