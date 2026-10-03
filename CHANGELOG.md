@@ -4,6 +4,12 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+## [0.3.3] - 2026-10-03
+
+### Changed
+
+- The repository moved to `ao3575911/repo2readme`. Package metadata, README links, the Action reference and the community files now point there. Old links redirect.
+
 ## [0.3.2] - 2026-09-28
 
 ### Added
@@ -67,7 +73,8 @@ All notable changes to this project are documented here. The format follows [Kee
 - Prebuilt npm tarball attached to each GitHub release (`npm install --global <tarball URL>`).
 - Atomic writes. `README.generated.md` is never overwritten without `--force`.
 
-[Unreleased]: https://github.com/ao3575911/repo2readme/compare/v0.3.2...HEAD
+[Unreleased]: https://github.com/ao3575911/repo2readme/compare/v0.3.3...HEAD
+[0.3.3]: https://github.com/ao3575911/repo2readme/compare/v0.3.2...v0.3.3
 [0.3.2]: https://github.com/ao3575911/repo2readme/compare/v0.3.1...v0.3.2
 [0.3.1]: https://github.com/ao3575911/repo2readme/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/ao3575911/repo2readme/compare/v0.2.0...v0.3.0
