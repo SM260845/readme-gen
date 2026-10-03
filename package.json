@@ -16,16 +16,16 @@
     "developer-tools",
     "typescript"
   ],
-  "homepage": "https://github.com/SM260845/repo2readme#readme",
+  "homepage": "https://github.com/ao3575911/repo2readme#readme",
   "bugs": {
-    "url": "https://github.com/SM260845/repo2readme/issues"
+    "url": "https://github.com/ao3575911/repo2readme/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/SM260845/repo2readme.git"
+    "url": "git+https://github.com/ao3575911/repo2readme.git"
   },
   "license": "MIT",
-  "author": "Harry White (https://github.com/SM260845)",
+  "author": "ao3575911 (https://github.com/ao3575911)",
   "type": "module",
   "bin": {
     "repo2readme": "bin/repo2readme.js"

@@ -6,5 +6,5 @@ repo2readme https://github.com/acme/widget --colour
 ```
 
 ```yaml
-- uses: SM260845/repo2readme@v0.0.1
+- uses: ao3575911/repo2readme@v0.0.1
 ```

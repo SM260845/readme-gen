@@ -6,15 +6,15 @@ Thanks for helping. This guide should get you from clone to merged PR quickly.
 
 - **Try it on a repository you know well** and report what it got wrong. Bad output is the most useful bug report we can get.
 - **Request or refine a style.** Use the *Style request* issue template.
-- **Pick up an issue** labeled [`good first issue`](https://github.com/SM260845/repo2readme/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) or [`help wanted`](https://github.com/SM260845/repo2readme/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22).
-- **Ask or suggest** in [Discussions](https://github.com/SM260845/repo2readme/discussions).
+- **Pick up an issue** labeled [`good first issue`](https://github.com/ao3575911/repo2readme/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) or [`help wanted`](https://github.com/ao3575911/repo2readme/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22).
+- **Ask or suggest** in [Discussions](https://github.com/ao3575911/repo2readme/discussions).
 
 ## Development setup
 
 You need Node.js 22 or newer.
 
 ```sh
-git clone https://github.com/SM260845/repo2readme.git
+git clone https://github.com/ao3575911/repo2readme.git
 cd repo2readme
 npm install
 npm run lint && npm run typecheck && npm test && npm run build

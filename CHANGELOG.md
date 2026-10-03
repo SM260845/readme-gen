@@ -48,7 +48,7 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ### Added
 
-- Composite GitHub Action (`uses: SM260845/repo2readme@v0.2.0`) that generates a README, uploads it as an artifact, and writes the summary to the job summary.
+- Composite GitHub Action (`uses: ao3575911/repo2readme@v0.2.0`) that generates a README, uploads it as an artifact, and writes the summary to the job summary.
 - `Action self-test` workflow (manual or on action changes) using the fixture provider.
 - Release workflow publishes to npm with provenance when an `NPM_TOKEN` secret is configured.
 
@@ -67,9 +67,9 @@ All notable changes to this project are documented here. The format follows [Kee
 - Prebuilt npm tarball attached to each GitHub release (`npm install --global <tarball URL>`).
 - Atomic writes. `README.generated.md` is never overwritten without `--force`.
 
-[Unreleased]: https://github.com/SM260845/repo2readme/compare/v0.3.2...HEAD
-[0.3.2]: https://github.com/SM260845/repo2readme/compare/v0.3.1...v0.3.2
-[0.3.1]: https://github.com/SM260845/repo2readme/compare/v0.3.0...v0.3.1
-[0.3.0]: https://github.com/SM260845/repo2readme/compare/v0.2.0...v0.3.0
-[0.2.0]: https://github.com/SM260845/repo2readme/compare/v0.1.0...v0.2.0
-[0.1.0]: https://github.com/SM260845/repo2readme/releases/tag/v0.1.0
+[Unreleased]: https://github.com/ao3575911/repo2readme/compare/v0.3.2...HEAD
+[0.3.2]: https://github.com/ao3575911/repo2readme/compare/v0.3.1...v0.3.2
+[0.3.1]: https://github.com/ao3575911/repo2readme/compare/v0.3.0...v0.3.1
+[0.3.0]: https://github.com/ao3575911/repo2readme/compare/v0.2.0...v0.3.0
+[0.2.0]: https://github.com/ao3575911/repo2readme/compare/v0.1.0...v0.2.0
+[0.1.0]: https://github.com/ao3575911/repo2readme/releases/tag/v0.1.0

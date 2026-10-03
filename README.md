@@ -2,13 +2,13 @@
 
 **Turn any public GitHub repository into a polished README draft in one command, with every command, link, badge and license claim traced to the source or flagged for review.**
 
-[![CI](https://github.com/SM260845/repo2readme/actions/workflows/ci.yml/badge.svg)](https://github.com/SM260845/repo2readme/actions/workflows/ci.yml)
-[![README check](https://github.com/SM260845/repo2readme/actions/workflows/readme-check.yml/badge.svg)](https://github.com/SM260845/repo2readme/actions/workflows/readme-check.yml)
+[![CI](https://github.com/ao3575911/repo2readme/actions/workflows/ci.yml/badge.svg)](https://github.com/ao3575911/repo2readme/actions/workflows/ci.yml)
+[![README check](https://github.com/ao3575911/repo2readme/actions/workflows/readme-check.yml/badge.svg)](https://github.com/ao3575911/repo2readme/actions/workflows/readme-check.yml)
 [![npm](https://img.shields.io/npm/v/repo2readme?cacheSeconds=300)](https://www.npmjs.com/package/repo2readme)
-[![License: MIT](https://img.shields.io/github/license/SM260845/repo2readme)](LICENSE)
+[![License: MIT](https://img.shields.io/github/license/ao3575911/repo2readme)](LICENSE)
 ![Node.js 22+](https://img.shields.io/badge/node-%3E%3D22-339933)
 
-📖 **Project overview and walkthrough:** [the repo2readme gist](https://gist.github.com/SM260845/0b4b91ca78a570e858921828c651dad3)
+📖 **Project overview and walkthrough:** [the repo2readme gist](https://gist.github.com/ao3575911/725db8b78a47b980ca23360f6bfd2da1)
 
 Point `repo2readme` at a repository and pick a style: **professional**, **trendy**, **minimalist** or **comprehensive**. It reads a bounded set of high-signal files through the GitHub API, builds a structured, evidence-annotated project brief, and asks a text-generation model to write only what that brief supports. It then validates the result. Anything it can't trace back to the repository ends up in a **Verify before publishing** checklist instead of slipping through.
 
@@ -107,16 +107,16 @@ Or run it once without installing:
 npx repo2readme https://github.com/acme/widget
 ```
 
-Alternatively, install the prebuilt tarball attached to the [v0.3.2 release](https://github.com/SM260845/repo2readme/releases/tag/v0.3.2):
+Alternatively, install the prebuilt tarball attached to the [v0.3.2 release](https://github.com/ao3575911/repo2readme/releases/tag/v0.3.2):
 
 ```sh
-npm install --global https://github.com/SM260845/repo2readme/releases/download/v0.3.2/repo2readme-0.3.2.tgz
+npm install --global https://github.com/ao3575911/repo2readme/releases/download/v0.3.2/repo2readme-0.3.2.tgz
 ```
 
 Or run it from a clone:
 
 ```sh
-git clone https://github.com/SM260845/repo2readme.git
+git clone https://github.com/ao3575911/repo2readme.git
 cd repo2readme
 npm install        # also builds dist/ via the prepare script
 npm link           # puts `repo2readme` on your PATH
@@ -125,7 +125,7 @@ npm link           # puts `repo2readme` on your PATH
 Any of these gives you the `repo2readme` command.
 
 > [!NOTE]
-> `npm install --global github:SM260845/repo2readme` doesn't work, because npm's global git installs don't build TypeScript.
+> `npm install --global github:ao3575911/repo2readme` doesn't work, because npm's global git installs don't build TypeScript.
 
 ## GitHub Action
 
@@ -142,7 +142,7 @@ jobs:
   readme:
     runs-on: ubuntu-latest
     steps:
-      - uses: SM260845/repo2readme@v0.3.2
+      - uses: ao3575911/repo2readme@v0.3.2
         with:
           style: professional                     # professional | trendy | minimalist | comprehensive
           api-key: ${{ secrets.REPO2README_API_KEY }}
@@ -340,7 +340,7 @@ repo2readme exists to keep READMEs evidence-backed, so this README is held to th
 
 - **npm scripts**: every `npm run <script>` or `npm test` shown here exists in `package.json`.
 - **Files and paths**: relative links, repository paths in backticks, and `node <file>` commands point to files that exist.
-- **Versions**: the Action tag (`SM260845/repo2readme@v…`), the release link and the tarball name all match the `package.json` version.
+- **Versions**: the Action tag (`ao3575911/repo2readme@v…`), the release link and the tarball name all match the `package.json` version.
 - **CLI flags**: every flag used in a `repo2readme` command is one the CLI accepts, and the [Options](#options) block lists exactly the flags in `--help`.
 - **Node.js engine**: "Node.js 22 or newer" and the Node badge match `engines.node`.
 - **Anchors**: every `#section` link resolves to a heading.
@@ -373,18 +373,18 @@ CI runs lint, typecheck, test and build on Node 22 and 24 (`.github/workflows/ci
 
 ## Roadmap
 
-repo2readme is intentionally narrow for now: public repositories only, and output stays local (or becomes a CI artifact). Planned next (see the [roadmap milestone](https://github.com/SM260845/repo2readme/milestone/1)):
+repo2readme is intentionally narrow for now: public repositories only, and output stays local (or becomes a CI artifact). Planned next (see the [roadmap milestone](https://github.com/ao3575911/repo2readme/milestone/1)):
 
-- More ecosystem detectors: [Deno tasks #1](https://github.com/SM260845/repo2readme/issues/1)
-- [Local models (Ollama, LM Studio) #4](https://github.com/SM260845/repo2readme/issues/4)
+- More ecosystem detectors: [Deno tasks #1](https://github.com/ao3575911/repo2readme/issues/1)
+- [Local models (Ollama, LM Studio) #4](https://github.com/ao3575911/repo2readme/issues/4)
 
-Later: [opt-in private repos #6](https://github.com/SM260845/repo2readme/issues/6), [draft-PR mode #7](https://github.com/SM260845/repo2readme/issues/7), [localized READMEs #8](https://github.com/SM260845/repo2readme/issues/8).
+Later: [opt-in private repos #6](https://github.com/ao3575911/repo2readme/issues/6), [draft-PR mode #7](https://github.com/ao3575911/repo2readme/issues/7), [localized READMEs #8](https://github.com/ao3575911/repo2readme/issues/8).
 
 Known limitations: monorepos are summarized from the root, and package-level manifests deeper in the tree get lower priority. Images and themes are out of scope for v1.
 
 ## Contributing
 
-Contributions are welcome, especially reports of READMEs it got wrong. Start with [CONTRIBUTING.md](CONTRIBUTING.md), pick a [good first issue](https://github.com/SM260845/repo2readme/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22), or share ideas in [Discussions](https://github.com/SM260845/repo2readme/discussions). Please follow the [Code of Conduct](CODE_OF_CONDUCT.md), and report vulnerabilities privately as described in [SECURITY.md](SECURITY.md).
+Contributions are welcome, especially reports of READMEs it got wrong. Start with [CONTRIBUTING.md](CONTRIBUTING.md), pick a [good first issue](https://github.com/ao3575911/repo2readme/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22), or share ideas in [Discussions](https://github.com/ao3575911/repo2readme/discussions). Please follow the [Code of Conduct](CODE_OF_CONDUCT.md), and report vulnerabilities privately as described in [SECURITY.md](SECURITY.md).
 
 ## License
 

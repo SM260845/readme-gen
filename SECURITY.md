@@ -11,7 +11,7 @@ Security fixes go into the latest release only.
 
 ## Reporting a vulnerability
 
-**Do not open a public issue.** Report privately through GitHub's [private vulnerability reporting](https://github.com/SM260845/repo2readme/security/advisories/new).
+**Do not open a public issue.** Report privately through GitHub's [private vulnerability reporting](https://github.com/ao3575911/repo2readme/security/advisories/new).
 
 Please include the repo2readme version, the command you ran (redact tokens), what happened and what you expected. We aim to acknowledge reports within 7 days.
 

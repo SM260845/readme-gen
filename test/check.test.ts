@@ -118,7 +118,7 @@ describe("repo2readme's own README", () => {
 
   it('loads flags, action inputs and layout from the real repository', () => {
     const c = loadContext(ROOT, programFlags());
-    expect(c.repoSlug).toBe('SM260845/repo2readme');
+    expect(c.repoSlug).toBe('ao3575911/repo2readme');
     expect(c.cliFlags.has('--provider')).toBe(true);
     expect(c.helpFlags.has('--provider')).toBe(false);
     expect(c.actionInputs?.has('api-key')).toBe(true);
